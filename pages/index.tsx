@@ -12,7 +12,9 @@ export default function Home() {
         />
       </Head>
       <main>
-        <p>A website to help choose color schema for your website</p>
+        <p className="text-3xl font-bold underline">
+          A website to help choose color schema for your website/blog
+        </p>
       </main>
     </Fragment>
   );
