@@ -4,7 +4,18 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        sm: "2rem",
+      },
+    },
+    extend: {
+      colors: {
+        blue: "var(--blue)",
+      },
+    },
   },
   plugins: [],
 };

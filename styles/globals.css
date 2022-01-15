@@ -1,7 +1,6 @@
-@import url("./tailwind.css");
-
 :root {
   --widthAndHeightOfPointer: 20px;
+  --blue: #0d3260;
 }
 
 html,
