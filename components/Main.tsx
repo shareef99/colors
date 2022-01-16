@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
-import { RgbColor, RgbStringColorPicker, HexColorInput } from "react-colorful";
+import { RgbColor, RgbStringColorPicker } from "react-colorful";
+import { MdFlipCameraAndroid } from "react-icons/md";
+import { rgbToHsl, rgbToHex, rgbToCmyk } from "../helper/colorConverter";
 
 type Result = "FAIL" | "AA" | "AAA";
+type ColorType = "hex" | "rgb" | "hsl" | "cmyk";
 
 interface Props {}
 
 const Main = (props: Props) => {
+  // Constants
+  const colorTypes: Array<ColorType> = ["rgb", "hsl", "hex", "cmyk"];
+
+  // States
   const [currentColor, setCurrentColor] = useState<"bgColor" | "textColor">(
     "bgColor"
   );
@@ -14,6 +21,9 @@ const Main = (props: Props) => {
   const [colorContrast, setColorContrast] = useState<number>(3.79);
   const [textResult, setTextResult] = useState<Result>("FAIL");
   const [headingResult, setHeadingResult] = useState<Result>("FAIL");
+  const [whichTypeOfColorsToDisplay, setWhichTypeOfColorToDisplay] = useState<
+    Array<ColorType>
+  >(["rgb"]);
 
   const changeColor = () => {
     if (currentColor === "bgColor") return setCurrentColor("textColor");
@@ -70,6 +80,36 @@ const Main = (props: Props) => {
     return "FAIL";
   };
 
+  const colorConverter = (color: string, colorType: ColorType): string => {
+    if (colorType === "hsl") {
+      const rgbColor: RgbColor = convertColorToRgbObject(color);
+      const hslColor = rgbToHsl(rgbColor);
+      console.log(hslColor);
+      return hslColor;
+    }
+    if (colorType === "hex") {
+      const rgbColor: RgbColor = convertColorToRgbObject(color);
+      const hexColor = rgbToHex(rgbColor);
+      console.log(hexColor);
+      return hexColor;
+    }
+    if (colorType === "cmyk") {
+      const rgbColor: RgbColor = convertColorToRgbObject(color);
+      const cmykColor = rgbToCmyk(rgbColor);
+      console.log(cmykColor);
+      return cmykColor;
+    }
+    return color;
+  };
+
+  const handleColorTypeChange = (colorType: ColorType) => {
+    if (whichTypeOfColorsToDisplay.includes(colorType))
+      return setWhichTypeOfColorToDisplay(
+        whichTypeOfColorsToDisplay.filter((type) => type !== colorType)
+      );
+    setWhichTypeOfColorToDisplay((prev) => [...prev, colorType]);
+  };
+
   useEffect(() => {
     if (bgColor && textColor) {
       const contrastValue = contrast(textColor, bgColor);
@@ -80,30 +120,27 @@ const Main = (props: Props) => {
   }, [bgColor, textColor]);
 
   return (
-    <main className="container w-[80%] mx-auto">
-      <section className="flex justify-between items-end">
+    <main className="container md:w-[80%] md:mx-auto">
+      <div className="mt-6">
+        <p
+          id="logo"
+          className="font-bold text-3xl first-letter:text-blue first-letter:text-5xl"
+        >
+          <span>G𝚘𝚘d</span>
+          <span className="inline-block first-letter:text-blue first-letter:text-4xl">
+            C𝚘ʅ𝚘rs
+          </span>
+        </p>
+      </div>
+      <section className="flex justify-between">
         {/* color picker */}
         <div className="flex-grow mr-3">
-          <div className="flex justify-between">
-            <div className="mt-6">
-              <p
-                id="logo"
-                className="font-bold text-3xl first-letter:text-blue first-letter:text-5xl"
-              >
-                <span>G𝚘𝚘d</span>
-                <span className="inline-block first-letter:text-blue first-letter:text-4xl">
-                  C𝚘ʅ𝚘rs
-                </span>
-              </p>
-              <p>
-                {" "}
-                <span>Color contrast:</span>
-                <span className="font-medium text-2xl pl-2">
-                  {colorContrast}
-                </span>
-              </p>
-            </div>
-            <div className="space-x-8 self-end">
+          <div className="flex justify-between font-medium text-gray-600">
+            <p>
+              <span>Color contrast:</span>
+              <span className="text-2xl pl-2">{colorContrast}</span>
+            </p>
+            <div className="space-x-8 self-end ">
               <span>
                 Text{" "}
                 <span
@@ -120,7 +157,8 @@ const Main = (props: Props) => {
                 <span
                   className="font-medium text-xl ml-1"
                   style={{
-                    color: textResult === "FAIL" ? "rgb(220 38 38)" : "green",
+                    color:
+                      headingResult === "FAIL" ? "rgb(220 38 38)" : "green",
                   }}
                 >
                   {headingResult}
@@ -135,25 +173,101 @@ const Main = (props: Props) => {
             />
           </div>
         </div>
+
         {/* Color display */}
-        <div className="mb-9">
-          <div className="">
+        <div className="self-center">
+          <div
+            id="flip and color types"
+            className="flex justify-between mb-2 font-medium"
+          >
+            <button
+              onClick={() => {
+                setBgColor(textColor);
+                setTextColor(bgColor);
+              }}
+              className="flex"
+            >
+              Flip <MdFlipCameraAndroid className="self-center ml-1" />
+            </button>
+            <div className="space-x-2">
+              {colorTypes.map((colorType) => (
+                <span
+                  onClick={() => handleColorTypeChange(colorType)}
+                  className={`cursor-pointer ${
+                    whichTypeOfColorsToDisplay.includes(colorType)
+                      ? "text-blue"
+                      : "text-gray-500"
+                  }`}
+                  key={colorType}
+                >
+                  {colorType}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div id="textColor" className="mb-4">
             <div
-              className="w-52 h-52"
+              className={`w-56 rounded shadow-md flex justify-center items-center ${
+                whichTypeOfColorsToDisplay.length === 0
+                  ? "h-[216px]"
+                  : whichTypeOfColorsToDisplay.length === 1
+                  ? "h-48"
+                  : whichTypeOfColorsToDisplay.length === 2
+                  ? "h-[168px]"
+                  : whichTypeOfColorsToDisplay.length === 3
+                  ? "h-36"
+                  : "h-[120px]"
+              }`}
               style={{ backgroundColor: textColor, color: bgColor }}
               onClick={() => setCurrentColor("textColor")}
             >
-              <span>Text Color</span>
+              <span className="inline-block">Text Color</span>
             </div>
-            <span>{textColor}</span>
+            <div className="flex flex-col">
+              {whichTypeOfColorsToDisplay.map((colorType) => (
+                <span key={colorType}>
+                  {colorType === "rgb"
+                    ? colorConverter(textColor, "rgb")
+                    : colorType === "hsl"
+                    ? colorConverter(textColor, "hsl")
+                    : colorType === "hex"
+                    ? colorConverter(textColor, "hex")
+                    : colorConverter(textColor, "cmyk")}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div id="bgColor">
             <div
-              className="w-52 h-52"
+              className={`w-56 rounded shadow-md flex justify-center items-center ${
+                whichTypeOfColorsToDisplay.length === 0
+                  ? "h-[216px]"
+                  : whichTypeOfColorsToDisplay.length === 1
+                  ? "h-48"
+                  : whichTypeOfColorsToDisplay.length === 2
+                  ? "h-[168px]"
+                  : whichTypeOfColorsToDisplay.length === 3
+                  ? "h-36"
+                  : "h-[120px]"
+              }`}
               style={{ backgroundColor: bgColor, color: textColor }}
               onClick={() => setCurrentColor("bgColor")}
             >
               <span>Background Color</span>
             </div>
-            <span>{bgColor}</span>
+            <div className="flex flex-col">
+              {whichTypeOfColorsToDisplay.map((colorType) => (
+                <span key={colorType}>
+                  {colorType === "rgb"
+                    ? colorConverter(bgColor, "rgb")
+                    : colorType === "hsl"
+                    ? colorConverter(bgColor, "hsl")
+                    : colorType === "hex"
+                    ? colorConverter(bgColor, "hex")
+                    : colorConverter(bgColor, "cmyk")}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
