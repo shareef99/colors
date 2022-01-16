@@ -26,13 +26,16 @@ a {
   text-decoration: none;
 }
 
+.color-picker {
+  width: 100%;
+}
+
 .color-picker .react-colorful {
   height: 500px;
-  width: 500px;
+  width: 100%;
 }
 
 .color-picker .react-colorful .react-colorful__saturation {
-  border-radius: 0;
 }
 
 .color-picker .react-colorful .react-colorful__hue {

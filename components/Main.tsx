@@ -80,21 +80,63 @@ const Main = (props: Props) => {
   }, [bgColor, textColor]);
 
   return (
-    <main>
-      <section>
-        <h1>Color contrast is {colorContrast}</h1>
-        <div>
-          <span>Text {textResult}</span>
-          <br />
-          <span>Heading {headingResult}</span>
-        </div>
-        <div className="flex justify-center">
-          <div className="color-picker">
+    <main className="container w-[80%] mx-auto">
+      <section className="flex justify-between items-end">
+        {/* color picker */}
+        <div className="flex-grow mr-3">
+          <div className="flex justify-between">
+            <div className="mt-6">
+              <p
+                id="logo"
+                className="font-bold text-3xl first-letter:text-blue first-letter:text-5xl"
+              >
+                <span>G𝚘𝚘d</span>
+                <span className="inline-block first-letter:text-blue first-letter:text-4xl">
+                  C𝚘ʅ𝚘rs
+                </span>
+              </p>
+              <p>
+                {" "}
+                <span>Color contrast:</span>
+                <span className="font-medium text-2xl pl-2">
+                  {colorContrast}
+                </span>
+              </p>
+            </div>
+            <div className="space-x-8 self-end">
+              <span>
+                Text{" "}
+                <span
+                  className="font-medium text-xl ml-1"
+                  style={{
+                    color: textResult === "FAIL" ? "rgb(220 38 38)" : "green",
+                  }}
+                >
+                  {textResult}
+                </span>
+              </span>
+              <span>
+                Heading{" "}
+                <span
+                  className="font-medium text-xl ml-1"
+                  style={{
+                    color: textResult === "FAIL" ? "rgb(220 38 38)" : "green",
+                  }}
+                >
+                  {headingResult}
+                </span>
+              </span>
+            </div>
+          </div>
+          <div className="color-picker mt-2">
             <RgbStringColorPicker
               color={currentColor === "bgColor" ? bgColor : textColor}
               onChange={currentColor === "bgColor" ? setBgColor : setTextColor}
             />
           </div>
+        </div>
+        {/* Color display */}
+        <div className="mb-9">
           <div className="">
             <div
               className="w-52 h-52"
@@ -103,7 +145,7 @@ const Main = (props: Props) => {
             >
               <span>Text Color</span>
             </div>
-            <HexColorInput color={textColor} onChange={setTextColor} prefixed />
+            <span>{textColor}</span>
             <div
               className="w-52 h-52"
               style={{ backgroundColor: bgColor, color: textColor }}
@@ -111,7 +153,7 @@ const Main = (props: Props) => {
             >
               <span>Background Color</span>
             </div>
-            <HexColorInput color={bgColor} onChange={setBgColor} prefixed />
+            <span>{bgColor}</span>
           </div>
         </div>
       </section>
