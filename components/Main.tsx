@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { RgbColor, RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
 import { rgbToHsl, rgbToHex, rgbToCmyk } from "../helper/colorConverter";
@@ -24,11 +24,6 @@ const Main = (props: Props) => {
   const [whichTypeOfColorsToDisplay, setWhichTypeOfColorToDisplay] = useState<
     Array<ColorType>
   >(["rgb"]);
-
-  const changeColor = () => {
-    if (currentColor === "bgColor") return setCurrentColor("textColor");
-    setCurrentColor("bgColor");
-  };
 
   const convertColorToRgbObject = (color: string): RgbColor => {
     const rgb = color.match(/\d+/g);
@@ -108,6 +103,30 @@ const Main = (props: Props) => {
         whichTypeOfColorsToDisplay.filter((type) => type !== colorType)
       );
     setWhichTypeOfColorToDisplay((prev) => [...prev, colorType]);
+  };
+
+  const handleRgbColorChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    x: string
+  ) => {
+    e.preventDefault();
+    if (isNaN(Number(e.target.value))) return;
+    if (Number(e.target.value) < 0 || Number(e.target.value) > 255) return;
+    let r: number, g: number, b: number;
+    if (x === "r") {
+      r = Number(e.target.value);
+      g = convertColorToRgbObject(textColor).g;
+      b = convertColorToRgbObject(textColor).b;
+    } else if (x === "g") {
+      r = convertColorToRgbObject(textColor).r;
+      g = Number(e.target.value);
+      b = convertColorToRgbObject(textColor).b;
+    } else if (x === "b") {
+      r = convertColorToRgbObject(textColor).r;
+      g = convertColorToRgbObject(textColor).g;
+      b = Number(e.target.value);
+    }
+    return setTextColor(`rgb(${r}, ${g}, ${b})`);
   };
 
   useEffect(() => {
@@ -226,13 +245,43 @@ const Main = (props: Props) => {
             <div className="flex flex-col">
               {whichTypeOfColorsToDisplay.map((colorType) => (
                 <span key={colorType}>
-                  {colorType === "rgb"
-                    ? colorConverter(textColor, "rgb")
-                    : colorType === "hsl"
-                    ? colorConverter(textColor, "hsl")
-                    : colorType === "hex"
-                    ? colorConverter(textColor, "hex")
-                    : colorConverter(textColor, "cmyk")}
+                  {colorType === "rgb" ? (
+                    <div className="border flex">
+                      <div>
+                        <span>r:</span>
+                        <input
+                          type="text"
+                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
+                          value={convertColorToRgbObject(textColor).r}
+                          onChange={(e) => handleRgbColorChange(e, "r")}
+                        />
+                      </div>
+                      <div>
+                        <span>g</span>
+                        <input
+                          type="text"
+                          value={convertColorToRgbObject(textColor).g}
+                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
+                          onChange={(e) => handleRgbColorChange(e, "g")}
+                        />
+                      </div>
+                      <div>
+                        <span>b</span>
+                        <input
+                          type="text"
+                          value={convertColorToRgbObject(textColor).b}
+                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
+                          onChange={(e) => handleRgbColorChange(e, "b")}
+                        />
+                      </div>
+                    </div>
+                  ) : colorType === "hsl" ? (
+                    colorConverter(textColor, "hsl")
+                  ) : colorType === "hex" ? (
+                    colorConverter(textColor, "hex")
+                  ) : (
+                    colorConverter(textColor, "cmyk")
+                  )}
                 </span>
               ))}
             </div>
