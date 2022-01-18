@@ -7,15 +7,15 @@ import {
   getTextRating,
   getHeadingRating,
 } from "../helper/colorRating";
-import { ColorType, Result } from "../lib/interface";
-import ColorValues from "./HomePage/ColorValues";
-import DisplayColor from "./HomePage/DisplayColor";
+import { ColorType, Result, Color } from "../lib/interface";
+import ColorPreview from "./HomePage/ColorPreview";
 
 interface Props {}
 
 const Main = (props: Props) => {
   // Constants
   const colorTypes: Array<ColorType> = ["hex", "rgb", "hsl", "cmyk"];
+  const colors: Array<Color> = ["textColor", "bgColor"];
 
   // States
   const [currentColor, setCurrentColor] = useState<"bgColor" | "textColor">(
@@ -153,38 +153,16 @@ const Main = (props: Props) => {
               ))}
             </div>
           </div>
-          <div id="textColor" className="mb-4">
-            <DisplayColor
-              noOfColors={typesOfColor.length}
-              textColor={textColor}
+          {colors.map((color) => (
+            <ColorPreview
               bgColor={bgColor}
-              label="Text Color"
-              onColorChange={() => setCurrentColor("textColor")}
-            />
-            <ColorValues
+              textColor={textColor}
+              currentColor={color}
+              onHandleRgbColorChange={handleRgbColorChange}
               typesOfColor={typesOfColor}
-              textColor={textColor}
-              bgColor={bgColor}
-              currentColor="textColor"
-              onRgbColorChange={handleRgbColorChange}
+              onColorChange={() => setCurrentColor(color)}
             />
-          </div>
-          <div id="bgColor">
-            <DisplayColor
-              noOfColors={typesOfColor.length}
-              textColor={textColor}
-              bgColor={bgColor}
-              label="Background Color"
-              onColorChange={() => setCurrentColor("bgColor")}
-            />
-            <ColorValues
-              typesOfColor={typesOfColor}
-              textColor={textColor}
-              bgColor={bgColor}
-              currentColor="bgColor"
-              onRgbColorChange={handleRgbColorChange}
-            />
-          </div>
+          ))}
         </div>
       </section>
     </main>

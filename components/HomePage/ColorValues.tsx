@@ -31,7 +31,11 @@ const ColorValues = ({
                 <input
                   type="text"
                   className="w-8 text-center p-0 m-0 border-0 bg-transparent"
-                  value={convertColorToRgbObject(bgColor).r}
+                  value={
+                    convertColorToRgbObject(
+                      currentColor === "bgColor" ? bgColor : textColor
+                    ).r
+                  }
                   onChange={(e) => onRgbColorChange(e, "r")}
                 />
               </div>
@@ -39,7 +43,11 @@ const ColorValues = ({
                 <span>g:</span>
                 <input
                   type="text"
-                  value={convertColorToRgbObject(bgColor).g}
+                  value={
+                    convertColorToRgbObject(
+                      currentColor === "bgColor" ? bgColor : textColor
+                    ).g
+                  }
                   className="w-8 text-center p-0 m-0 border-0 bg-transparent"
                   onChange={(e) => onRgbColorChange(e, "g")}
                 />
@@ -48,7 +56,11 @@ const ColorValues = ({
                 <span>b:</span>
                 <input
                   type="text"
-                  value={convertColorToRgbObject(bgColor).b}
+                  value={
+                    convertColorToRgbObject(
+                      currentColor === "bgColor" ? bgColor : textColor
+                    ).b
+                  }
                   className="w-8 text-center p-0 m-0 border-0 bg-transparent"
                   onChange={(e) => onRgbColorChange(e, "b")}
                 />
