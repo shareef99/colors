@@ -1,11 +1,15 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { RgbColor, RgbStringColorPicker, HslColor } from "react-colorful";
+import { RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
-import { rgbToHsl, rgbToHex, rgbToCmyk } from "../helper/colorConverter";
+import { convertColorToRgbObject } from "../helper/colorConverter";
+import {
+  contrast,
+  getTextRating,
+  getHeadingRating,
+} from "../helper/colorRating";
+import { ColorType, Result } from "../lib/interface";
+import ColorValues from "./HomePage/ColorValues";
 import DisplayColor from "./HomePage/DisplayColor";
-
-type Result = "FAIL" | "AA" | "AAA";
-type ColorType = "hex" | "rgb" | "hsl" | "cmyk";
 
 interface Props {}
 
@@ -22,88 +26,12 @@ const Main = (props: Props) => {
   const [colorContrast, setColorContrast] = useState<number>(3.79);
   const [textResult, setTextResult] = useState<Result>("FAIL");
   const [headingResult, setHeadingResult] = useState<Result>("FAIL");
-  const [whichTypeOfColorsToDisplay, setWhichTypeOfColorToDisplay] = useState<
-    Array<ColorType>
-  >(["rgb"]);
-
-  const convertColorToRgbObject = (color: string): RgbColor => {
-    const rgb = color.match(/\d+/g);
-    if (
-      rgb === undefined ||
-      rgb === null ||
-      rgb[0] === undefined ||
-      rgb[1] === undefined ||
-      rgb[2] === undefined
-    )
-      return { r: 0, g: 0, b: 0 };
-
-    return {
-      r: +rgb[0],
-      g: +rgb[1],
-      b: +rgb[2],
-    };
-  };
-
-  const getLuminance = ({ r, g, b }: RgbColor): number => {
-    let a = [r, g, b].map((v) => {
-      v /= 255;
-      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-    });
-    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-  };
-
-  const contrast = (textColor: string, bgColor: string): number => {
-    const lum1 = getLuminance(convertColorToRgbObject(textColor));
-    const lum2 = getLuminance(convertColorToRgbObject(bgColor));
-
-    const brightest = Math.max(lum1, lum2);
-    const darkest = Math.min(lum1, lum2);
-
-    return Math.round(((brightest + 0.05) / (darkest + 0.05)) * 100) / 100;
-  };
-
-  const getTextRating = (): Result => {
-    const contrastRatio = contrast(textColor, bgColor);
-    if (contrastRatio >= 7) return "AAA";
-    if (contrastRatio >= 4.5) return "AA";
-    return "FAIL";
-  };
-
-  const getHeadingRating = (): Result => {
-    const contrastRatio = contrast(textColor, bgColor);
-    if (contrastRatio >= 4.5) return "AAA";
-    if (contrastRatio >= 3) return "AA";
-    return "FAIL";
-  };
-
-  const colorConverter = (color: string, colorType: ColorType): string => {
-    if (colorType === "hsl") {
-      const rgbColor: RgbColor = convertColorToRgbObject(color);
-      const hslColor = rgbToHsl(rgbColor);
-      console.log(hslColor);
-      return hslColor;
-    }
-    if (colorType === "hex") {
-      const rgbColor: RgbColor = convertColorToRgbObject(color);
-      const hexColor = rgbToHex(rgbColor);
-      console.log(hexColor);
-      return hexColor;
-    }
-    if (colorType === "cmyk") {
-      const rgbColor: RgbColor = convertColorToRgbObject(color);
-      const cmykColor = rgbToCmyk(rgbColor);
-      console.log(cmykColor);
-      return cmykColor;
-    }
-    return color;
-  };
+  const [typesOfColor, setTypesOfColor] = useState<Array<ColorType>>(["rgb"]);
 
   const handleColorTypeChange = (colorType: ColorType) => {
-    if (whichTypeOfColorsToDisplay.includes(colorType))
-      return setWhichTypeOfColorToDisplay(
-        whichTypeOfColorsToDisplay.filter((type) => type !== colorType)
-      );
-    setWhichTypeOfColorToDisplay((prev) => [...prev, colorType]);
+    if (typesOfColor.includes(colorType))
+      return setTypesOfColor(typesOfColor.filter((type) => type !== colorType));
+    setTypesOfColor((prev) => [...prev, colorType]);
   };
 
   const handleRgbColorChange = (
@@ -134,8 +62,8 @@ const Main = (props: Props) => {
     if (bgColor && textColor) {
       const contrastValue = contrast(textColor, bgColor);
       setColorContrast(contrastValue);
-      setTextResult(getTextRating());
-      setHeadingResult(getHeadingRating());
+      setTextResult(getTextRating(textColor, bgColor));
+      setHeadingResult(getHeadingRating(textColor, bgColor));
     }
   }, [bgColor, textColor]);
 
@@ -214,7 +142,7 @@ const Main = (props: Props) => {
                 <span
                   onClick={() => handleColorTypeChange(colorType)}
                   className={`cursor-pointer ${
-                    whichTypeOfColorsToDisplay.includes(colorType)
+                    typesOfColor.includes(colorType)
                       ? "text-blue"
                       : "text-gray-500"
                   }`}
@@ -227,107 +155,35 @@ const Main = (props: Props) => {
           </div>
           <div id="textColor" className="mb-4">
             <DisplayColor
-              noOfColors={whichTypeOfColorsToDisplay.length}
+              noOfColors={typesOfColor.length}
               textColor={textColor}
               bgColor={bgColor}
               label="Text Color"
               onColorChange={() => setCurrentColor("textColor")}
             />
-            <div className="flex flex-col ml-2 mt-2">
-              {whichTypeOfColorsToDisplay.map((colorType) => (
-                <div key={colorType}>
-                  {colorType === "rgb" ? (
-                    <div className="flex text-center">
-                      <div>
-                        <span>r:</span>
-                        <input
-                          type="text"
-                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
-                          value={convertColorToRgbObject(textColor).r}
-                          onChange={(e) => handleRgbColorChange(e, "r")}
-                        />
-                      </div>
-                      <div>
-                        <span>g:</span>
-                        <input
-                          type="text"
-                          value={convertColorToRgbObject(textColor).g}
-                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
-                          onChange={(e) => handleRgbColorChange(e, "g")}
-                        />
-                      </div>
-                      <div>
-                        <span>b:</span>
-                        <input
-                          type="text"
-                          value={convertColorToRgbObject(textColor).b}
-                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
-                          onChange={(e) => handleRgbColorChange(e, "b")}
-                        />
-                      </div>
-                    </div>
-                  ) : colorType === "hsl" ? (
-                    colorConverter(textColor, "hsl")
-                  ) : colorType === "hex" ? (
-                    colorConverter(textColor, "hex")
-                  ) : (
-                    colorConverter(textColor, "cmyk")
-                  )}
-                </div>
-              ))}
-            </div>
+            <ColorValues
+              typesOfColor={typesOfColor}
+              textColor={textColor}
+              bgColor={bgColor}
+              currentColor="textColor"
+              onRgbColorChange={handleRgbColorChange}
+            />
           </div>
           <div id="bgColor">
             <DisplayColor
-              noOfColors={whichTypeOfColorsToDisplay.length}
+              noOfColors={typesOfColor.length}
               textColor={textColor}
               bgColor={bgColor}
               label="Background Color"
               onColorChange={() => setCurrentColor("bgColor")}
             />
-            <div className="flex flex-col ml-2 mt-2">
-              {whichTypeOfColorsToDisplay.map((colorType) => (
-                <span key={colorType}>
-                  {colorType === "rgb" ? (
-                    <div className="flex text-center">
-                      <div>
-                        <span>r:</span>
-                        <input
-                          type="text"
-                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
-                          value={convertColorToRgbObject(bgColor).r}
-                          onChange={(e) => handleRgbColorChange(e, "r")}
-                        />
-                      </div>
-                      <div>
-                        <span>g:</span>
-                        <input
-                          type="text"
-                          value={convertColorToRgbObject(bgColor).g}
-                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
-                          onChange={(e) => handleRgbColorChange(e, "g")}
-                        />
-                      </div>
-                      <div>
-                        <span>b:</span>
-                        <input
-                          type="text"
-                          value={convertColorToRgbObject(bgColor).b}
-                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
-                          onChange={(e) => handleRgbColorChange(e, "b")}
-                        />
-                      </div>
-                    </div>
-                  ) : colorType === "hsl" ? (
-                    colorConverter(bgColor, "hsl")
-                  ) : colorType === "hex" ? (
-                    colorConverter(bgColor, "hex")
-                  ) : (
-                    colorConverter(bgColor, "cmyk")
-                  )}
-                </span>
-              ))}
-            </div>
+            <ColorValues
+              typesOfColor={typesOfColor}
+              textColor={textColor}
+              bgColor={bgColor}
+              currentColor="bgColor"
+              onRgbColorChange={handleRgbColorChange}
+            />
           </div>
         </div>
       </section>

@@ -1,4 +1,5 @@
 import { RgbColor } from "react-colorful";
+import { ColorType } from "../lib/interface";
 
 export const rgbToHsl = ({ r, g, b }: RgbColor): string => {
   // Make r, g, and b fractions of 1
@@ -70,4 +71,44 @@ export const rgbToCmyk = ({ r, g, b }: RgbColor): string => {
   y = Math.round(y * 100);
 
   return `cmyk(${c}%, ${m}%, ${y}}%, ${k}%)`;
+};
+
+export const convertColorToRgbObject = (color: string): RgbColor => {
+  const rgb = color.match(/\d+/g);
+  if (
+    rgb === undefined ||
+    rgb === null ||
+    rgb[0] === undefined ||
+    rgb[1] === undefined ||
+    rgb[2] === undefined
+  )
+    return { r: 0, g: 0, b: 0 };
+
+  return {
+    r: +rgb[0],
+    g: +rgb[1],
+    b: +rgb[2],
+  };
+};
+
+export const colorConverter = (color: string, colorType: ColorType): string => {
+  if (colorType === "hsl") {
+    const rgbColor: RgbColor = convertColorToRgbObject(color);
+    const hslColor = rgbToHsl(rgbColor);
+    console.log(hslColor);
+    return hslColor;
+  }
+  if (colorType === "hex") {
+    const rgbColor: RgbColor = convertColorToRgbObject(color);
+    const hexColor = rgbToHex(rgbColor);
+    console.log(hexColor);
+    return hexColor;
+  }
+  if (colorType === "cmyk") {
+    const rgbColor: RgbColor = convertColorToRgbObject(color);
+    const cmykColor = rgbToCmyk(rgbColor);
+    console.log(cmykColor);
+    return cmykColor;
+  }
+  return color;
 };
