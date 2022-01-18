@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { RgbColor, RgbStringColorPicker, HslColor } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
 import { rgbToHsl, rgbToHex, rgbToCmyk } from "../helper/colorConverter";
+import DisplayColor from "./HomePage/DisplayColor";
 
 type Result = "FAIL" | "AA" | "AAA";
 type ColorType = "hex" | "rgb" | "hsl" | "cmyk";
@@ -225,23 +226,13 @@ const Main = (props: Props) => {
             </div>
           </div>
           <div id="textColor" className="mb-4">
-            <div
-              className={`w-56 rounded shadow-md flex justify-center items-center ${
-                whichTypeOfColorsToDisplay.length === 0
-                  ? "h-[216px]"
-                  : whichTypeOfColorsToDisplay.length === 1
-                  ? "h-48"
-                  : whichTypeOfColorsToDisplay.length === 2
-                  ? "h-[168px]"
-                  : whichTypeOfColorsToDisplay.length === 3
-                  ? "h-36"
-                  : "h-[120px]"
-              }`}
-              style={{ backgroundColor: textColor, color: bgColor }}
-              onClick={() => setCurrentColor("textColor")}
-            >
-              <span className="inline-block">Text Color</span>
-            </div>
+            <DisplayColor
+              noOfColors={whichTypeOfColorsToDisplay.length}
+              textColor={textColor}
+              bgColor={bgColor}
+              label="Text Color"
+              onColorChange={() => setCurrentColor("textColor")}
+            />
             <div className="flex flex-col ml-2 mt-2">
               {whichTypeOfColorsToDisplay.map((colorType) => (
                 <div key={colorType}>
@@ -287,23 +278,13 @@ const Main = (props: Props) => {
             </div>
           </div>
           <div id="bgColor">
-            <div
-              className={`w-56 rounded shadow-md flex justify-center items-center ${
-                whichTypeOfColorsToDisplay.length === 0
-                  ? "h-[216px]"
-                  : whichTypeOfColorsToDisplay.length === 1
-                  ? "h-48"
-                  : whichTypeOfColorsToDisplay.length === 2
-                  ? "h-[168px]"
-                  : whichTypeOfColorsToDisplay.length === 3
-                  ? "h-36"
-                  : "h-[120px]"
-              }`}
-              style={{ backgroundColor: bgColor, color: textColor }}
-              onClick={() => setCurrentColor("bgColor")}
-            >
-              <span>Background Color</span>
-            </div>
+            <DisplayColor
+              noOfColors={whichTypeOfColorsToDisplay.length}
+              textColor={textColor}
+              bgColor={bgColor}
+              label="Background Color"
+              onColorChange={() => setCurrentColor("bgColor")}
+            />
             <div className="flex flex-col ml-2 mt-2">
               {whichTypeOfColorsToDisplay.map((colorType) => (
                 <span key={colorType}>
