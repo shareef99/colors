@@ -10,7 +10,7 @@ interface Props {}
 
 const Main = (props: Props) => {
   // Constants
-  const colorTypes: Array<ColorType> = ["rgb", "hsl", "hex", "cmyk"];
+  const colorTypes: Array<ColorType> = ["hex", "rgb", "hsl", "cmyk"];
 
   // States
   const [currentColor, setCurrentColor] = useState<"bgColor" | "textColor">(
@@ -40,20 +40,6 @@ const Main = (props: Props) => {
       r: +rgb[0],
       g: +rgb[1],
       b: +rgb[2],
-    };
-  };
-
-  const convertColorToHslObject = (color: string): HslColor => {
-    let [h, s, l] = color.split(",");
-
-    h = h.slice(4);
-    s = s.trim().replace("%", "");
-    l = l.trim().replace("%", "").slice(0, -1);
-
-    return {
-      h: +h,
-      s: +s,
-      l: +l,
     };
   };
 
@@ -117,12 +103,6 @@ const Main = (props: Props) => {
         whichTypeOfColorsToDisplay.filter((type) => type !== colorType)
       );
     setWhichTypeOfColorToDisplay((prev) => [...prev, colorType]);
-
-    if (colorType === "hsl") {
-      console.log(
-        convertColorToHslObject(colorConverter(textColor, colorType))
-      );
-    }
   };
 
   const handleRgbColorChange = (
