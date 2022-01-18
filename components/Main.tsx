@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { RgbColor, RgbStringColorPicker } from "react-colorful";
+import { RgbColor, RgbStringColorPicker, HslColor } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
 import { rgbToHsl, rgbToHex, rgbToCmyk } from "../helper/colorConverter";
 
@@ -40,6 +40,20 @@ const Main = (props: Props) => {
       r: +rgb[0],
       g: +rgb[1],
       b: +rgb[2],
+    };
+  };
+
+  const convertColorToHslObject = (color: string): HslColor => {
+    let [h, s, l] = color.split(",");
+
+    h = h.slice(4);
+    s = s.trim().replace("%", "");
+    l = l.trim().replace("%", "").slice(0, -1);
+
+    return {
+      h: +h,
+      s: +s,
+      l: +l,
     };
   };
 
@@ -103,6 +117,12 @@ const Main = (props: Props) => {
         whichTypeOfColorsToDisplay.filter((type) => type !== colorType)
       );
     setWhichTypeOfColorToDisplay((prev) => [...prev, colorType]);
+
+    if (colorType === "hsl") {
+      console.log(
+        convertColorToHslObject(colorConverter(textColor, colorType))
+      );
+    }
   };
 
   const handleRgbColorChange = (
@@ -242,11 +262,11 @@ const Main = (props: Props) => {
             >
               <span className="inline-block">Text Color</span>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col ml-2 mt-2">
               {whichTypeOfColorsToDisplay.map((colorType) => (
-                <span key={colorType}>
+                <div key={colorType}>
                   {colorType === "rgb" ? (
-                    <div className="border flex">
+                    <div className="flex text-center">
                       <div>
                         <span>r:</span>
                         <input
@@ -257,7 +277,7 @@ const Main = (props: Props) => {
                         />
                       </div>
                       <div>
-                        <span>g</span>
+                        <span>g:</span>
                         <input
                           type="text"
                           value={convertColorToRgbObject(textColor).g}
@@ -266,7 +286,7 @@ const Main = (props: Props) => {
                         />
                       </div>
                       <div>
-                        <span>b</span>
+                        <span>b:</span>
                         <input
                           type="text"
                           value={convertColorToRgbObject(textColor).b}
@@ -282,7 +302,7 @@ const Main = (props: Props) => {
                   ) : (
                     colorConverter(textColor, "cmyk")
                   )}
-                </span>
+                </div>
               ))}
             </div>
           </div>
@@ -304,16 +324,46 @@ const Main = (props: Props) => {
             >
               <span>Background Color</span>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col ml-2 mt-2">
               {whichTypeOfColorsToDisplay.map((colorType) => (
                 <span key={colorType}>
-                  {colorType === "rgb"
-                    ? colorConverter(bgColor, "rgb")
-                    : colorType === "hsl"
-                    ? colorConverter(bgColor, "hsl")
-                    : colorType === "hex"
-                    ? colorConverter(bgColor, "hex")
-                    : colorConverter(bgColor, "cmyk")}
+                  {colorType === "rgb" ? (
+                    <div className="flex text-center">
+                      <div>
+                        <span>r:</span>
+                        <input
+                          type="text"
+                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
+                          value={convertColorToRgbObject(bgColor).r}
+                          onChange={(e) => handleRgbColorChange(e, "r")}
+                        />
+                      </div>
+                      <div>
+                        <span>g:</span>
+                        <input
+                          type="text"
+                          value={convertColorToRgbObject(bgColor).g}
+                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
+                          onChange={(e) => handleRgbColorChange(e, "g")}
+                        />
+                      </div>
+                      <div>
+                        <span>b:</span>
+                        <input
+                          type="text"
+                          value={convertColorToRgbObject(bgColor).b}
+                          className="w-8 text-center p-0 m-0 border-0 bg-transparent"
+                          onChange={(e) => handleRgbColorChange(e, "b")}
+                        />
+                      </div>
+                    </div>
+                  ) : colorType === "hsl" ? (
+                    colorConverter(bgColor, "hsl")
+                  ) : colorType === "hex" ? (
+                    colorConverter(bgColor, "hex")
+                  ) : (
+                    colorConverter(bgColor, "cmyk")
+                  )}
                 </span>
               ))}
             </div>
