@@ -1,5 +1,5 @@
 import { RgbColor } from "react-colorful";
-import { ColorType } from "../lib/interface";
+import { ColorType } from "../interface";
 
 export const rgbToHsl = ({ r, g, b }: RgbColor): string => {
   // Make r, g, and b fractions of 1

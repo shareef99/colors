@@ -1,12 +1,12 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
-import { convertColorToRgbObject } from "../helper/colorConverter";
+import { convertColorToRgbObject } from "../lib/helper/colorConverter";
 import {
   contrast,
   getTextRating,
   getHeadingRating,
-} from "../helper/colorRating";
+} from "../lib/helper/colorRating";
 import { ColorType, Result, Color } from "../lib/interface";
 import ColorPreview from "./HomePage/ColorPreview";
 

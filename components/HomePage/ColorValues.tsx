@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 import {
   colorConverter,
   convertColorToRgbObject,
-} from "../../helper/colorConverter";
+} from "../../lib/helper/colorConverter";
 import { ColorType } from "../../lib/interface";
 
 interface Props {
