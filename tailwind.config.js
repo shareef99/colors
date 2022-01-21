@@ -14,6 +14,7 @@ module.exports = {
     extend: {
       colors: {
         blue: "var(--blue)",
+        lightBg: "var(--light-bg)",
       },
     },
   },

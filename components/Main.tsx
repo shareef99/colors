@@ -21,8 +21,8 @@ const Main = (props: Props) => {
   const [currentColor, setCurrentColor] = useState<"bgColor" | "textColor">(
     "bgColor"
   );
-  const [bgColor, setBgColor] = useState<string>("rgb(98, 135, 193)");
-  const [textColor, setTextColor] = useState<string>("rgb(44, 45, 45)");
+  const [bgColor, setBgColor] = useState<string>("rgb(165, 189, 228)");
+  const [textColor, setTextColor] = useState<string>("rgb(25, 45, 45)");
   const [colorContrast, setColorContrast] = useState<number>(3.79);
   const [textResult, setTextResult] = useState<Result>("FAIL");
   const [headingResult, setHeadingResult] = useState<Result>("FAIL");
@@ -123,7 +123,7 @@ const Main = (props: Props) => {
         </div>
 
         {/* Color display */}
-        <div className="self-center">
+        <div className="self-center ">
           <div
             id="flip and color types"
             className="flex justify-between mb-2 font-medium"
@@ -186,21 +186,23 @@ const Main = (props: Props) => {
       </div>
 
       <section
-        className="px-[10%]"
+        className="py-28 px-[10%] space-y-[40px]"
         style={{
           background: bgColor,
           color: textColor,
         }}
       >
-        <div className="pt-24">
-          <h1>Why choosing Good Colors is important.</h1>
-          <p>
+        <div className="">
+          <h1 className="font-black text-5xl">
+            Why choosing Good Colors is important.
+          </h1>
+          <p className="py-5 font-medium strong italic text-lg">
             Choosing the right color combinations is crucial to creating a
             successful website.
           </p>
           <p>
             Choosing colors for a website is not about just choosing colors that
-            you like- the colors should strengthen the website and branding of
+            you like, the colors should strengthen the website and branding of
             the business. Colors that work well individually may not be as
             pleasing together as they are individually. By considering color
             combination as both a science, seeing how colors work together
@@ -209,15 +211,30 @@ const Main = (props: Props) => {
             combination for your website design can be achieved.
           </p>
         </div>
-        <div>
-          <h2>Colour contrast</h2>
-          <p>
+        <div className="">
+          <h2 className="font-bold text-3xl">Colour contrast</h2>
+          <p className="pt-5">
             For digital accessibility, the concept of color contrast is as
             critical as it is simple. Color contrast refers to the difference in
             light between foreground and its background. By using
             sufficiently-contrasting colors you are making sure that the great
             content you've developed for your website can be read by everyone.
           </p>
+        </div>
+        <div className="">
+          <blockquote
+            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-10"
+            style={{ borderColor: textColor }}
+          >
+            how we are{" "}
+            <a
+              href="https://www.google.com"
+              target="_blank"
+              className="font-medium hover:opacity-90 hover:duration-500 hover:ease-in"
+            >
+              calculating Color Contrast
+            </a>
+          </blockquote>
         </div>
       </section>
     </main>
