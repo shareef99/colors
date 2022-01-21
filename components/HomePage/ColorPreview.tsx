@@ -4,6 +4,7 @@ import ColorValues from "./ColorValues";
 import DisplayColor from "./DisplayColor";
 
 interface Props {
+  key: string;
   textColor: string;
   bgColor: string;
   currentColor: Color;

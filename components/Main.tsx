@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
 import { convertColorToRgbObject } from "../lib/helper/colorConverter";
@@ -68,8 +68,8 @@ const Main = (props: Props) => {
   }, [bgColor, textColor]);
 
   return (
-    <main className="container md:w-[80%] md:mx-auto">
-      <div className="mt-6">
+    <main>
+      <div className="mt-6 container">
         <p
           id="logo"
           className="font-bold text-3xl first-letter:text-blue first-letter:text-5xl"
@@ -80,10 +80,10 @@ const Main = (props: Props) => {
           </span>
         </p>
       </div>
-      <section className="flex justify-between">
+      <section className="flex justify-between container">
         {/* color picker */}
         <div className="flex-grow mr-3">
-          <div className="flex justify-between font-medium text-gray-600">
+          <div className="flex justify-between font-medium text-gray-600 px-5">
             <p>
               <span>Color contrast:</span>
               <span className="text-2xl pl-2">{colorContrast}</span>
@@ -155,6 +155,7 @@ const Main = (props: Props) => {
           </div>
           {colors.map((color) => (
             <ColorPreview
+              key={color}
               bgColor={bgColor}
               textColor={textColor}
               currentColor={color}
@@ -163,6 +164,60 @@ const Main = (props: Props) => {
               onColorChange={() => setCurrentColor(color)}
             />
           ))}
+        </div>
+      </section>
+
+      <div className="rotate-180 h-14 relative -z-50 -mt-28">
+        <svg
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 293 94"
+          xmlSpace="preserve"
+          preserveAspectRatio="none"
+          fill={bgColor}
+          className="w-full h-full"
+        >
+          <polygon points="0,0 0,94 293,0 "></polygon>
+        </svg>
+      </div>
+
+      <section
+        className="px-[10%]"
+        style={{
+          background: bgColor,
+          color: textColor,
+        }}
+      >
+        <div className="pt-24">
+          <h1>Why choosing Good Colors is important.</h1>
+          <p>
+            Choosing the right color combinations is crucial to creating a
+            successful website.
+          </p>
+          <p>
+            Choosing colors for a website is not about just choosing colors that
+            you like- the colors should strengthen the website and branding of
+            the business. Colors that work well individually may not be as
+            pleasing together as they are individually. By considering color
+            combination as both a science, seeing how colors work together
+            literally, and as an art, by seeing what colors symbolize and how
+            they are evaluated internally and emotionally, the correct color
+            combination for your website design can be achieved.
+          </p>
+        </div>
+        <div>
+          <h2>Colour contrast</h2>
+          <p>
+            For digital accessibility, the concept of color contrast is as
+            critical as it is simple. Color contrast refers to the difference in
+            light between foreground and its background. By using
+            sufficiently-contrasting colors you are making sure that the great
+            content you've developed for your website can be read by everyone.
+          </p>
         </div>
       </section>
     </main>
