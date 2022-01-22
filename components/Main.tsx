@@ -69,7 +69,7 @@ const Main = (props: Props) => {
 
   return (
     <main>
-      <div className="mt-6 container">
+      <div className="mt-6 mb-2 container">
         <p
           id="logo"
           className="font-bold text-3xl first-letter:text-blue first-letter:text-5xl"
@@ -80,21 +80,25 @@ const Main = (props: Props) => {
           </span>
         </p>
       </div>
-      <section className="flex justify-between container">
+      <section className="flex flex-col md:flex-row justify-between container">
         {/* color picker */}
         <div className="flex-grow mr-3">
-          <div className="flex justify-between font-medium text-gray-600 px-5">
+          <div
+            className="flex flex-col xs:flex-row xs:justify-between xs:items-center font-medium 
+              text-gray-600 pl-5 xs:pl-0 sm:px-5"
+          >
             <p>
               <span>Color contrast:</span>
               <span className="text-2xl pl-2">{colorContrast}</span>
             </p>
-            <div className="space-x-8 self-end ">
+            <div className="space-x-8">
               <span>
                 Text{" "}
                 <span
                   className="font-medium text-xl ml-1"
                   style={{
-                    color: textResult === "FAIL" ? "rgb(220 38 38)" : "green",
+                    color:
+                      textResult === "FAIL" ? "var(--error)" : "var(--success)",
                   }}
                 >
                   {textResult}
@@ -106,7 +110,9 @@ const Main = (props: Props) => {
                   className="font-medium text-xl ml-1"
                   style={{
                     color:
-                      headingResult === "FAIL" ? "rgb(220 38 38)" : "green",
+                      headingResult === "FAIL"
+                        ? "var(--error)"
+                        : "var(--success)",
                   }}
                 >
                   {headingResult}
@@ -153,17 +159,19 @@ const Main = (props: Props) => {
               ))}
             </div>
           </div>
-          {colors.map((color) => (
-            <ColorPreview
-              key={color}
-              bgColor={bgColor}
-              textColor={textColor}
-              currentColor={color}
-              onHandleRgbColorChange={handleRgbColorChange}
-              typesOfColor={typesOfColor}
-              onColorChange={() => setCurrentColor(color)}
-            />
-          ))}
+          <div className="flex flex-col xs:flex-row xs:space-x-4 md:flex-col md:space-x-0">
+            {colors.map((color) => (
+              <ColorPreview
+                key={color}
+                bgColor={bgColor}
+                textColor={textColor}
+                currentColor={color}
+                onHandleRgbColorChange={handleRgbColorChange}
+                typesOfColor={typesOfColor}
+                onColorChange={() => setCurrentColor(color)}
+              />
+            ))}
+          </div>
         </div>
       </section>
 

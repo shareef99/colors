@@ -2,6 +2,8 @@
   --widthAndHeightOfPointer: 20px;
   --blue: #0d3260;
   --light-bg: #e8f4d0;
+  --error: rgb(220 38 38);
+  --success: green;
 }
 
 html,
@@ -32,11 +34,8 @@ a {
 }
 
 .color-picker .react-colorful {
-  height: 500px;
+  height: 300px;
   width: 100%;
-}
-
-.color-picker .react-colorful .react-colorful__saturation {
 }
 
 .color-picker .react-colorful .react-colorful__hue {
@@ -51,4 +50,16 @@ a {
   height: var(--widthAndHeightOfPointer);
   border-width: 4px;
   box-shadow: 0 0 5px rgb(0 0 0 / 34%);
+}
+
+@media (min-width: 475px) {
+  .color-picker .react-colorful {
+    height: 400px;
+  }
+}
+
+@media (min-width: 640px) {
+  .color-picker .react-colorful {
+    height: 500px;
+  }
 }
