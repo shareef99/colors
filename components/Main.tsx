@@ -1,7 +1,10 @@
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
-import { convertColorToRgbObject } from "../lib/helper/colorConverter";
+import {
+  convertColorToRgbObject,
+  getRandomColor,
+} from "../lib/helper/colorConverter";
 import {
   contrast,
   getTextRating,
@@ -29,6 +32,7 @@ const Main = (props: Props) => {
   const [headingResult, setHeadingResult] = useState<Result>("AAA");
   const [typesOfColor, setTypesOfColor] = useState<Array<ColorType>>(["rgb"]);
 
+  // Handlers
   const handleColorTypeChange = (colorType: ColorType) => {
     if (typesOfColor.includes(colorType))
       return setTypesOfColor(typesOfColor.filter((type) => type !== colorType));
@@ -59,6 +63,7 @@ const Main = (props: Props) => {
     return setTextColor(`rgb(${r}, ${g}, ${b})`);
   };
 
+  // Effects
   useEffect(() => {
     if (bgColor && textColor) {
       const contrastValue = contrast(textColor, bgColor);
@@ -198,7 +203,7 @@ const Main = (props: Props) => {
               AAA
             </span>
           </div>
-          <h1 className="font-black text-5xl">
+          <h1 className="font-black text-4xl xs:text-5xl">
             Why choosing Good Colors is important.
           </h1>
         </div>
@@ -241,7 +246,7 @@ const Main = (props: Props) => {
           </p>
         </div>
 
-        <div className="text-2xl">
+        <div className="text-xl">
           <blockquote
             className="border-l-4 rounded-tl-sm rounded-bl-sm pl-4 xs:pl-8 sm:pl-10"
             style={{ borderColor: textColor }}
@@ -270,6 +275,30 @@ const Main = (props: Props) => {
               <b>4.5</b>.
             </span>
           </blockquote>
+        </div>
+
+        <div className="pt-10 font-medium flex flex-col">
+          <span className="pb-3">Random Colors</span>
+          <div>
+            <button
+              className="border-2 rounded-md px-3 py-1 mx-0"
+              style={{
+                borderColor: textColor,
+                color: bgColor,
+                backgroundColor: textColor,
+              }}
+              onClick={() => setBgColor(getRandomColor())}
+            >
+              Background
+            </button>
+            <button
+              className="border-2 rounded-md px-4 py-1 mx-4"
+              style={{ borderColor: textColor }}
+              onClick={() => setTextColor(getRandomColor())}
+            >
+              Text
+            </button>
+          </div>
         </div>
       </section>
     </main>
