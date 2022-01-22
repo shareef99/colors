@@ -63,3 +63,6 @@ a {
     height: 500px;
   }
 }
+
+@media (min-width: 768px) {
+}

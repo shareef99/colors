@@ -24,9 +24,9 @@ const Main = (props: Props) => {
   );
   const [bgColor, setBgColor] = useState<string>("rgb(165, 189, 228)");
   const [textColor, setTextColor] = useState<string>("rgb(25, 45, 45)");
-  const [colorContrast, setColorContrast] = useState<number>(3.79);
-  const [textResult, setTextResult] = useState<Result>("FAIL");
-  const [headingResult, setHeadingResult] = useState<Result>("FAIL");
+  const [colorContrast, setColorContrast] = useState<number>(7.56);
+  const [textResult, setTextResult] = useState<Result>("AAA");
+  const [headingResult, setHeadingResult] = useState<Result>("AAA");
   const [typesOfColor, setTypesOfColor] = useState<Array<ColorType>>(["rgb"]);
 
   const handleColorTypeChange = (colorType: ColorType) => {
@@ -179,32 +179,58 @@ const Main = (props: Props) => {
       <SlightSlope bgColor={bgColor} />
 
       <section
-        className="py-28 px-[10%] space-y-[40px]"
+        className="pt-28 pb-20 px-4 xs:px-[10%]"
         style={{
           background: bgColor,
           color: textColor,
         }}
       >
-        <div className="">
+        <div className="flex">
+          <div className="flex flex-col font-semibold text-center pr-4">
+            <span
+              className={`${headingResult === "FAIL" ? "line-through" : ""}`}
+            >
+              AA
+            </span>
+            <span
+              className={`${headingResult === "AAA" ? "" : "line-through"}`}
+            >
+              AAA
+            </span>
+          </div>
           <h1 className="font-black text-5xl">
             Why choosing Good Colors is important.
           </h1>
-          <p className="py-5 font-medium strong italic text-lg">
-            Choosing the right color combinations is crucial to creating a
-            successful website.
-          </p>
-          <p>
-            Choosing colors for a website is not about just choosing colors that
-            you like, the colors should strengthen the website and branding of
-            the business. Colors that work well individually may not be as
-            pleasing together as they are individually. By considering color
-            combination as both a science, seeing how colors work together
-            literally, and as an art, by seeing what colors symbolize and how
-            they are evaluated internally and emotionally, the correct color
-            combination for your website design can be achieved.
-          </p>
         </div>
-        <div className="">
+        <div className="flex items-center">
+          <div className="flex flex-col font-semibold text-center pr-4">
+            <span className={`${textResult === "FAIL" ? "line-through" : ""}`}>
+              AA
+            </span>
+            <span className={`${textResult === "AAA" ? "" : "line-through"}`}>
+              AAA
+            </span>
+          </div>
+          <div>
+            <p className="py-5 font-medium strong italic text-lg">
+              Choosing the right color combinations is crucial to creating a
+              successful website.
+            </p>
+            <p>
+              Choosing colors for a website is not about just choosing colors
+              that you like, the colors should strengthen the website and
+              branding of the business. Colors that work well individually may
+              not be as pleasing together as they are individually. By
+              considering color combination as both a science, seeing how colors
+              work together literally, and as an art, by seeing what colors
+              symbolize and how they are evaluated internally and emotionally,
+              the correct color combination for your website design can be
+              achieved.
+            </p>
+          </div>
+        </div>
+
+        <div className="py-10">
           <h2 className="font-bold text-3xl">Colour contrast</h2>
           <p className="pt-5">
             For digital accessibility, the concept of color contrast is as
@@ -214,19 +240,35 @@ const Main = (props: Props) => {
             content you've developed for your website can be read by everyone.
           </p>
         </div>
-        <div className="">
+
+        <div className="text-2xl">
           <blockquote
-            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-10"
+            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-4 xs:pl-8 sm:pl-10"
             style={{ borderColor: textColor }}
           >
-            how we are{" "}
+            how to{" "}
             <a
               href="https://www.google.com"
               target="_blank"
               className="font-medium hover:opacity-90 hover:duration-500 hover:ease-in"
             >
-              calculating Color Contrast
+              calculate Color Contrast
             </a>
+          </blockquote>
+          <br />
+          <blockquote
+            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-4 xs:pl-8 sm:pl-10 flex flex-col"
+            style={{ borderColor: textColor }}
+          >
+            <span>
+              For <b>AA</b> the required contrast for <b>text</b> is <b>4.5</b>.
+              <b>Headlines and large text</b> needs at least <b>3</b>.
+            </span>
+            <span>
+              <b>AAA</b> requires <b>7</b> for <b>text</b>. For{" "}
+              <b>headlines and large text</b> the minimum is
+              <b>4.5</b>.
+            </span>
           </blockquote>
         </div>
       </section>
