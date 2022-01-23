@@ -1,10 +1,15 @@
 type Props = {
   bgColor: string;
+  position: "top" | "bottom";
 };
 
-const SlightSlope = ({ bgColor }: Props) => {
+const SlightSlope = ({ bgColor, position }: Props) => {
   return (
-    <div className="rotate-180 h-14 relative -z-50 -mt-28">
+    <div
+      className={`h-14 relative -z-50 ${
+        position === "top" ? "rotate-180 -mt-28" : "rotate-[270]"
+      }`}
+    >
       <svg
         version="1.1"
         id="Layer_1"

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
 import {
@@ -10,7 +10,7 @@ import {
   getTextRating,
   getHeadingRating,
 } from "../lib/helper/colorRating";
-import { ColorType, Result, Color } from "../lib/interface";
+import { ColorType, Result, Color, ColorPalette } from "../lib/interface";
 import ColorPreview from "./HomePage/ColorPreview";
 import SlightSlope from "./HomePage/SlightSlope";
 
@@ -20,6 +20,13 @@ const Main = (props: Props) => {
   // Constants
   const colorTypes: Array<ColorType> = ["hex", "rgb", "hsl", "cmyk"];
   const colors: Array<Color> = ["textColor", "bgColor"];
+  const modes: Array<{ mode: string; name: string; count: number }> = [
+    { mode: "complement", name: "Complementary", count: 2 },
+    { mode: "monochrome", name: "Monochromatic", count: 3 },
+    { mode: "analogic", name: "Analogous", count: 3 },
+    { mode: "triad", name: "Triadic", count: 3 },
+    { mode: "quad", name: "Tetradic", count: 4 },
+  ];
 
   // States
   const [currentColor, setCurrentColor] = useState<"bgColor" | "textColor">(
@@ -31,6 +38,10 @@ const Main = (props: Props) => {
   const [textResult, setTextResult] = useState<Result>("AAA");
   const [headingResult, setHeadingResult] = useState<Result>("AAA");
   const [typesOfColor, setTypesOfColor] = useState<Array<ColorType>>(["rgb"]);
+  const [textColorPalettes, setTextColorPalettes] = useState<ColorPalette>([]);
+  const [bgColorPalettes, setBgColorPalettes] = useState<ColorPalette>([]);
+  const [shouldGeneratePalette, setShouldGeneratePalette] =
+    useState<any>(false);
 
   // Handlers
   const handleColorTypeChange = (colorType: ColorType) => {
@@ -63,6 +74,51 @@ const Main = (props: Props) => {
     return setTextColor(`rgb(${r}, ${g}, ${b})`);
   };
 
+  const generateColorPalette = () => {
+    const tColor = convertColorToRgbObject(textColor);
+    const bColor = convertColorToRgbObject(bgColor);
+
+    console.log("submitted");
+
+    setTextColorPalettes([]);
+    setBgColorPalettes([]);
+
+    modes.forEach(async ({ mode, count }, index) => {
+      const res = await fetch(
+        `https://www.thecolorapi.com/scheme?rgb=${tColor.r},${tColor.g},${tColor.b}&format=json&mode=${mode}&count=${count}`
+      );
+      const data = await res.json();
+
+      setTextColorPalettes((prev) => [
+        ...prev,
+        { colors: data.colors.map((color) => color.rgb.value), mode },
+      ]);
+    });
+
+    modes.forEach(async ({ mode, count }) => {
+      const res = await fetch(
+        `https://www.thecolorapi.com/scheme?rgb=${bColor.r},${bColor.g},${bColor.b}&format=json&mode=${mode}&count=${count}`
+      );
+      const data = await res.json();
+
+      setBgColorPalettes((prev) => [
+        ...prev,
+        { colors: data.colors.map((color) => color.rgb.value), mode },
+      ]);
+    });
+  };
+
+  const handleScroll = () => {
+    window.addEventListener("scroll", () => {
+      if (window.pageYOffset >= 800) {
+        setShouldGeneratePalette(true);
+      }
+      if (window.pageYOffset < 800) {
+        setShouldGeneratePalette(false);
+      }
+    });
+  };
+
   // Effects
   useEffect(() => {
     if (bgColor && textColor) {
@@ -72,6 +128,18 @@ const Main = (props: Props) => {
       setHeadingResult(getHeadingRating(textColor, bgColor));
     }
   }, [bgColor, textColor]);
+
+  useEffect(() => {
+    handleScroll();
+    return () => {
+      setShouldGeneratePalette({});
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(shouldGeneratePalette);
+    if (shouldGeneratePalette === true) generateColorPalette();
+  }, [shouldGeneratePalette]);
 
   return (
     <main>
@@ -135,7 +203,7 @@ const Main = (props: Props) => {
         </div>
 
         {/* Color display */}
-        <div className="self-center ">
+        <div className="self-center">
           <div
             id="flip and color types"
             className="flex justify-between mb-2 font-medium"
@@ -181,10 +249,10 @@ const Main = (props: Props) => {
         </div>
       </section>
 
-      <SlightSlope bgColor={bgColor} />
+      <SlightSlope bgColor={bgColor} position="top" />
 
       <section
-        className="pt-28 pb-20 px-4 xs:px-[10%]"
+        className="py-28 px-4 xs:px-[10%]"
         style={{
           background: bgColor,
           color: textColor,
@@ -301,8 +369,101 @@ const Main = (props: Props) => {
           </div>
         </div>
       </section>
+
+      <SlightSlope bgColor={bgColor} position="bottom" />
+
+      <section className="py-10 bg-lightBg container -mt-28 rounded-t-lg">
+        <div className="text-center">
+          <h2 className="text-4xl xs:text-5xl text-center font-semibold text-blue">
+            More Fun With Colors
+          </h2>
+          <button className="text-center" onClick={generateColorPalette}>
+            Generate Colors
+          </button>
+        </div>
+        <div>
+          {bgColorPalettes &&
+            bgColorPalettes.map((colorPalettes, index) => (
+              <div key={Math.random()}>
+                <h3 className="text-2xl font-semibold text-center">
+                  {colorPalettes.mode}
+                </h3>
+                <div className="flex">
+                  {colorPalettes.colors.map((color) => (
+                    <div
+                      key={Math.random()}
+                      style={{ backgroundColor: color }}
+                      className="h-28 w-28"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          {textColorPalettes &&
+            textColorPalettes.map((colorPalettes, index) => (
+              <div key={Math.random()}>
+                <h3 className="text-2xl font-semibold text-center">
+                  {colorPalettes.mode}
+                </h3>
+                <div className="flex">
+                  {colorPalettes.colors.map((color, index) => (
+                    <div
+                      key={Math.random()}
+                      style={{ backgroundColor: color }}
+                      className="h-28 w-28"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            ))}
+        </div>
+      </section>
     </main>
   );
 };
 
 export default Main;
+
+{
+  /* <div className="flex justify-center">
+  <div className="flex flex-col py-2 space-y-[4px]">
+    <label htmlFor="bgColor" className="flex items-center">
+      <input
+        type="radio"
+        id="bgColor"
+        name="color"
+        value="bgColor"
+        className="mr-2 cursor-pointer"
+        defaultChecked
+      />
+      Background Color
+      <div
+        style={{
+          backgroundColor: bgColor,
+          height: "20px",
+          width: "20px",
+          marginLeft: "4px",
+        }}
+      />
+    </label>
+    <label htmlFor="textColor" className="flex items-center">
+      <input
+        type="radio"
+        id="textColor"
+        name="color"
+        value="textColor"
+        className="mr-2 cursor-pointer"
+      />
+      Text Color
+      <div
+        style={{
+          backgroundColor: textColor,
+          height: "20px",
+          width: "20px",
+          marginLeft: "4px",
+        }}
+      />
+    </label>
+  </div>
+</div>; */
+}

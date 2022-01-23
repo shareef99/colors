@@ -9,3 +9,5 @@ export type RgbColor = {
   g: number;
   b: number;
 };
+
+export type ColorPalette = Array<{ colors: Array<string>; mode: string }>;
