@@ -377,45 +377,52 @@ const Main = (props: Props) => {
           <h2 className="text-4xl xs:text-5xl text-center font-semibold text-blue">
             More Fun With Colors
           </h2>
-          <button className="text-center" onClick={generateColorPalette}>
-            Generate Colors
-          </button>
         </div>
         <div>
-          {bgColorPalettes &&
-            bgColorPalettes.map((colorPalettes, index) => (
-              <div key={Math.random()}>
-                <h3 className="text-2xl font-semibold text-center">
-                  {colorPalettes.mode}
-                </h3>
-                <div className="flex">
-                  {colorPalettes.colors.map((color) => (
-                    <div
-                      key={Math.random()}
-                      style={{ backgroundColor: color }}
-                      className="h-28 w-28"
-                    ></div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          {textColorPalettes &&
-            textColorPalettes.map((colorPalettes, index) => (
-              <div key={Math.random()}>
-                <h3 className="text-2xl font-semibold text-center">
-                  {colorPalettes.mode}
-                </h3>
-                <div className="flex">
-                  {colorPalettes.colors.map((color, index) => (
-                    <div
-                      key={Math.random()}
-                      style={{ backgroundColor: color }}
-                      className="h-28 w-28"
-                    ></div>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="my-5">
+            <h3 className="font-semibold text-xl xs:text-2xl">
+              Background Color Palettes
+            </h3>
+            <div className="my-5 space-y-[16px]">
+              {bgColorPalettes &&
+                bgColorPalettes.map((colorPalettes) => (
+                  <div key={Math.random()}>
+                    <h3 className="font-medium">{colorPalettes.mode}</h3>
+                    <div className="flex">
+                      {colorPalettes.colors.map((color) => (
+                        <div
+                          key={Math.random()}
+                          style={{ backgroundColor: color }}
+                          className="h-28 w-28"
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div className="my-5">
+            <h3 className="font-semibold text-xl xs:text-2xl">
+              Text Color Palettes
+            </h3>
+            <div className="my-5 space-y-[16px]">
+              {textColorPalettes &&
+                textColorPalettes.map((colorPalettes) => (
+                  <div key={Math.random()}>
+                    <h3 className="font-medium">{colorPalettes.mode}</h3>
+                    <div className="flex">
+                      {colorPalettes.colors.map((color) => (
+                        <div
+                          key={Math.random()}
+                          style={{ backgroundColor: color }}
+                          className="h-28 w-28"
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
         </div>
       </section>
     </main>
