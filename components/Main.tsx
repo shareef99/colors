@@ -1,10 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
-import {
-  convertColorToRgbObject,
-  getRandomColor,
-} from "../lib/helper/colorConverter";
+import { convertColorToRgbObject } from "../lib/helper/colorConverter";
 import {
   contrast,
   getTextRating,
@@ -17,8 +14,10 @@ import {
   ColorPalette,
   RgbColor,
 } from "../lib/interface";
+import ColorPalettes from "./HomePage/ColorPalettes";
 import ColorPreview from "./HomePage/ColorPreview";
-import SlightSlope from "./HomePage/SlightSlope";
+import Content from "./HomePage/Content";
+import TypesOfColor from "./HomePage/TypesOfColor";
 
 interface Props {}
 
@@ -236,21 +235,11 @@ const Main = (props: Props) => {
             >
               Flip <MdFlipCameraAndroid className="self-center ml-1" />
             </button>
-            <div className="space-x-2">
-              {colorTypes.map((colorType) => (
-                <span
-                  onClick={() => handleColorTypeChange(colorType)}
-                  className={`cursor-pointer ${
-                    typesOfColor.includes(colorType)
-                      ? "text-blue"
-                      : "text-gray-500"
-                  }`}
-                  key={colorType}
-                >
-                  {colorType}
-                </span>
-              ))}
-            </div>
+            <TypesOfColor
+              colorTypes={colorTypes}
+              onHandleColorTypeChange={handleColorTypeChange}
+              typesOfColor={typesOfColor}
+            />
           </div>
           <div className="flex flex-col xs:flex-row xs:space-x-4 md:flex-col md:space-x-0">
             {colors.map((color) => (
@@ -267,130 +256,14 @@ const Main = (props: Props) => {
           </div>
         </div>
       </section>
-
-      <SlightSlope bgColor={bgColor} position="top" />
-
-      <section
-        className="py-28 px-4 xs:px-[10%]"
-        style={{
-          background: bgColor,
-          color: textColor,
-        }}
-      >
-        <div className="flex">
-          <div className="flex flex-col font-semibold text-center pr-4">
-            <span
-              className={`${headingResult === "FAIL" ? "line-through" : ""}`}
-            >
-              AA
-            </span>
-            <span
-              className={`${headingResult === "AAA" ? "" : "line-through"}`}
-            >
-              AAA
-            </span>
-          </div>
-          <h1 className="font-black text-4xl xs:text-5xl">
-            Why choosing Good Colors is important.
-          </h1>
-        </div>
-        <div className="flex items-center">
-          <div className="flex flex-col font-semibold text-center pr-4">
-            <span className={`${textResult === "FAIL" ? "line-through" : ""}`}>
-              AA
-            </span>
-            <span className={`${textResult === "AAA" ? "" : "line-through"}`}>
-              AAA
-            </span>
-          </div>
-          <div>
-            <p className="py-5 font-medium strong italic text-lg">
-              Choosing the right color combinations is crucial to creating a
-              successful website.
-            </p>
-            <p>
-              Choosing colors for a website is not about just choosing colors
-              that you like, the colors should strengthen the website and
-              branding of the business. Colors that work well individually may
-              not be as pleasing together as they are individually. By
-              considering color combination as both a science, seeing how colors
-              work together literally, and as an art, by seeing what colors
-              symbolize and how they are evaluated internally and emotionally,
-              the correct color combination for your website design can be
-              achieved.
-            </p>
-          </div>
-        </div>
-
-        <div className="py-10">
-          <h2 className="font-bold text-3xl">Colour contrast</h2>
-          <p className="pt-5">
-            For digital accessibility, the concept of color contrast is as
-            critical as it is simple. Color contrast refers to the difference in
-            light between foreground and its background. By using
-            sufficiently-contrasting colors you are making sure that the great
-            content you've developed for your website can be read by everyone.
-          </p>
-        </div>
-
-        <div className="text-xl">
-          <blockquote
-            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-4 xs:pl-8 sm:pl-10"
-            style={{ borderColor: textColor }}
-          >
-            how to{" "}
-            <a
-              href="https://www.google.com"
-              target="_blank"
-              className="font-medium hover:opacity-90 hover:duration-500 hover:ease-in"
-            >
-              calculate Color Contrast
-            </a>
-          </blockquote>
-          <br />
-          <blockquote
-            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-4 xs:pl-8 sm:pl-10 flex flex-col"
-            style={{ borderColor: textColor }}
-          >
-            <span>
-              For <b>AA</b> the required contrast for <b>text</b> is <b>4.5</b>.
-              <b>Headlines and large text</b> needs at least <b>3</b>.
-            </span>
-            <span>
-              <b>AAA</b> requires <b>7</b> for <b>text</b>. For{" "}
-              <b>headlines and large text</b> the minimum is
-              <b>4.5</b>.
-            </span>
-          </blockquote>
-        </div>
-
-        <div className="pt-10 font-medium flex flex-col">
-          <span className="pb-3">Random Colors</span>
-          <div>
-            <button
-              className="border-2 rounded-md px-3 py-1 mx-0"
-              style={{
-                borderColor: textColor,
-                color: bgColor,
-                backgroundColor: textColor,
-              }}
-              onClick={() => setBgColor(getRandomColor())}
-            >
-              Background
-            </button>
-            <button
-              className="border-2 rounded-md px-4 py-1 mx-4"
-              style={{ borderColor: textColor }}
-              onClick={() => setTextColor(getRandomColor())}
-            >
-              Text
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <SlightSlope bgColor={bgColor} position="bottom" />
-
+      <Content
+        bgColor={bgColor}
+        textColor={textColor}
+        headingResult={headingResult}
+        textResult={textResult}
+        onBgColorChange={(color: string) => setBgColor(color)}
+        onTextColorChange={(color: string) => setTextColor(color)}
+      />
       <section className="py-10 bg-lightBg container -mt-28 rounded-t-lg">
         <div className="text-center">
           <h2 className="text-4xl xs:text-5xl text-center font-semibold text-blue">
@@ -399,97 +272,28 @@ const Main = (props: Props) => {
         </div>
         <div className="px-4 xs:px-[10%]">
           <div className="my-5">
-            <div>
-              <h3 className="font-semibold text-xl xs:text-2xl">
-                Background Color Palettes
-              </h3>
-              <div className="space-x-2 font-medium">
-                {colorTypes.map((colorType) => (
-                  <span
-                    onClick={() => handleColorTypeChange(colorType)}
-                    className={`cursor-pointer ${
-                      typesOfColor.includes(colorType)
-                        ? "text-blue"
-                        : "text-gray-500"
-                    }`}
-                    key={colorType}
-                  >
-                    {colorType}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="my-5 space-y-[16px]">
-              {bgColorPalettes &&
-                bgColorPalettes.map((colorPalettes) => (
-                  <div key={Math.random()}>
-                    <h3 className="font-medium pb-2">
-                      {colorPalettes.paletteName}
-                    </h3>
-                    <div className="flex">
-                      {colorPalettes.colors.map((color) => (
-                        <div key={Math.random()}>
-                          <div
-                            style={{ backgroundColor: color.rgb }}
-                            className="h-28 w-28"
-                          ></div>
-                          <div className="flex flex-col w-36">
-                            {typesOfColor.map((value) => (
-                              <div key={Math.random()}>
-                                {value === "rgb"
-                                  ? color.rgb
-                                  : value === "hex"
-                                  ? color.hex
-                                  : value === "hsl"
-                                  ? color.hsl
-                                  : color.cmyk.replaceAll("NaN", "0")}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-            </div>
+            <h3 className="font-semibold text-xl xs:text-2xl">
+              Background Color Palettes
+            </h3>
+            <TypesOfColor
+              colorTypes={colorTypes}
+              onHandleColorTypeChange={handleColorTypeChange}
+              typesOfColor={typesOfColor}
+              className="font-medium"
+            />
+            <ColorPalettes
+              typesOfColor={typesOfColor}
+              colorPalettes={bgColorPalettes}
+            />
           </div>
           <div className="my-5">
             <h3 className="font-semibold text-xl xs:text-2xl">
               Text Color Palettes
             </h3>
-            <div className="my-5 space-y-[16px]">
-              {textColorPalettes &&
-                textColorPalettes.map((colorPalettes) => (
-                  <div key={Math.random()}>
-                    <h3 className="font-medium pb-2">
-                      {colorPalettes.paletteName}
-                    </h3>
-                    <div className="flex">
-                      {colorPalettes.colors.map((color) => (
-                        <div key={Math.random()}>
-                          <div
-                            style={{ backgroundColor: color.rgb }}
-                            className="h-28 w-28"
-                          ></div>
-                          <div className="flex flex-col w-36">
-                            {typesOfColor.map((value) => (
-                              <span key={Math.random()}>
-                                {value === "rgb"
-                                  ? color.rgb
-                                  : value === "hex"
-                                  ? color.hex
-                                  : value === "hsl"
-                                  ? color.hsl
-                                  : color.cmyk.replaceAll("NaN", "0")}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-            </div>
+            <ColorPalettes
+              typesOfColor={typesOfColor}
+              colorPalettes={textColorPalettes}
+            />
           </div>
         </div>
       </section>

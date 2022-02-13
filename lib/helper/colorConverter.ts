@@ -95,19 +95,16 @@ export const colorConverter = (color: string, colorType: ColorType): string => {
   if (colorType === "hsl") {
     const rgbColor: RgbColor = convertColorToRgbObject(color);
     const hslColor = rgbToHsl(rgbColor);
-    console.log(hslColor);
     return hslColor;
   }
   if (colorType === "hex") {
     const rgbColor: RgbColor = convertColorToRgbObject(color);
     const hexColor = rgbToHex(rgbColor);
-    console.log(hexColor);
     return hexColor;
   }
   if (colorType === "cmyk") {
     const rgbColor: RgbColor = convertColorToRgbObject(color);
     const cmykColor = rgbToCmyk(rgbColor);
-    console.log(cmykColor);
     return cmykColor;
   }
   return color;
