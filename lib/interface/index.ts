@@ -10,4 +10,8 @@ export type RgbColor = {
   b: number;
 };
 
-export type ColorPalette = Array<{ colors: Array<string>; mode: string }>;
+export type ColorPalette = Array<{
+  colors: Array<{ rgb: string; hex: string; hsl: string; cmyk: string }>;
+  mode: string;
+  paletteName: string;
+}>;

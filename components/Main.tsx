@@ -83,7 +83,7 @@ const Main = (props: Props) => {
     setTextColorPalettes([]);
     setBgColorPalettes([]);
 
-    modes.forEach(async ({ mode, count }, index) => {
+    modes.forEach(async ({ mode, count, name }, index) => {
       const res = await fetch(
         `https://www.thecolorapi.com/scheme?rgb=${tColor.r},${tColor.g},${tColor.b}&format=json&mode=${mode}&count=${count}`
       );
@@ -91,11 +91,20 @@ const Main = (props: Props) => {
 
       setTextColorPalettes((prev) => [
         ...prev,
-        { colors: data.colors.map((color) => color.rgb.value), mode },
+        {
+          colors: data.colors.map((color) => ({
+            rgb: color.rgb.value,
+            hex: color.hex.value,
+            hsl: color.hsl.value,
+            cmyk: color.cmyk.value,
+          })),
+          mode,
+          paletteName: name,
+        },
       ]);
     });
 
-    modes.forEach(async ({ mode, count }) => {
+    modes.forEach(async ({ mode, count, name }) => {
       const res = await fetch(
         `https://www.thecolorapi.com/scheme?rgb=${bColor.r},${bColor.g},${bColor.b}&format=json&mode=${mode}&count=${count}`
       );
@@ -103,7 +112,16 @@ const Main = (props: Props) => {
 
       setBgColorPalettes((prev) => [
         ...prev,
-        { colors: data.colors.map((color) => color.rgb.value), mode },
+        {
+          colors: data.colors.map((color) => ({
+            rgb: color.rgb.value,
+            hex: color.hex.value,
+            hsl: color.hsl.value,
+            cmyk: color.cmyk.value,
+          })),
+          mode,
+          paletteName: name,
+        },
       ]);
     });
   };
@@ -378,23 +396,57 @@ const Main = (props: Props) => {
             More Fun With Colors
           </h2>
         </div>
-        <div>
+        <div className="px-4 xs:px-[10%]">
           <div className="my-5">
-            <h3 className="font-semibold text-xl xs:text-2xl">
-              Background Color Palettes
-            </h3>
+            <div>
+              <h3 className="font-semibold text-xl xs:text-2xl">
+                Background Color Palettes
+              </h3>
+              <div className="space-x-2 font-medium">
+                {colorTypes.map((colorType) => (
+                  <span
+                    onClick={() => handleColorTypeChange(colorType)}
+                    className={`cursor-pointer ${
+                      typesOfColor.includes(colorType)
+                        ? "text-blue"
+                        : "text-gray-500"
+                    }`}
+                    key={colorType}
+                  >
+                    {colorType}
+                  </span>
+                ))}
+              </div>
+            </div>
             <div className="my-5 space-y-[16px]">
               {bgColorPalettes &&
                 bgColorPalettes.map((colorPalettes) => (
                   <div key={Math.random()}>
-                    <h3 className="font-medium">{colorPalettes.mode}</h3>
+                    <h3 className="font-medium pb-2">
+                      {colorPalettes.paletteName}
+                    </h3>
                     <div className="flex">
                       {colorPalettes.colors.map((color) => (
-                        <div
-                          key={Math.random()}
-                          style={{ backgroundColor: color }}
-                          className="h-28 w-28"
-                        ></div>
+                        <div>
+                          <div
+                            key={Math.random()}
+                            style={{ backgroundColor: color.rgb }}
+                            className="h-28 w-28"
+                          ></div>
+                          <p className="flex flex-col space-y-[4px] w-36">
+                            {typesOfColor.map((value) =>
+                              value === "rgb" ? (
+                                <span>{color.rgb}</span>
+                              ) : value === "hex" ? (
+                                <span>{color.hex}</span>
+                              ) : value === "hsl" ? (
+                                <span>{color.hsl}</span>
+                              ) : (
+                                <span>{color.cmyk.replaceAll("NaN", "0")}</span>
+                              )
+                            )}
+                          </p>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -409,14 +461,31 @@ const Main = (props: Props) => {
               {textColorPalettes &&
                 textColorPalettes.map((colorPalettes) => (
                   <div key={Math.random()}>
-                    <h3 className="font-medium">{colorPalettes.mode}</h3>
-                    <div className="flex">
+                    <h3 className="font-medium pb-2">
+                      {colorPalettes.paletteName}
+                    </h3>
+                    <div className="flex space-x-[28px]">
                       {colorPalettes.colors.map((color) => (
-                        <div
-                          key={Math.random()}
-                          style={{ backgroundColor: color }}
-                          className="h-28 w-28"
-                        ></div>
+                        <div>
+                          <div
+                            key={Math.random()}
+                            style={{ backgroundColor: color.rgb }}
+                            className="h-28 w-28"
+                          ></div>
+                          <p className="flex flex-col w-36">
+                            {typesOfColor.map((value) =>
+                              value === "rgb" ? (
+                                <span>{color.rgb}</span>
+                              ) : value === "hex" ? (
+                                <span>{color.hex}</span>
+                              ) : value === "hsl" ? (
+                                <span>{color.hsl}</span>
+                              ) : (
+                                <span>{color.cmyk.replaceAll("NaN", "0")}</span>
+                              )
+                            )}
+                          </p>
+                        </div>
                       ))}
                     </div>
                   </div>
