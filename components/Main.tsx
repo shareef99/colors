@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { RgbStringColorPicker } from "react-colorful";
 import { MdFlipCameraAndroid } from "react-icons/md";
 import {
@@ -10,7 +10,13 @@ import {
   getTextRating,
   getHeadingRating,
 } from "../lib/helper/colorRating";
-import { ColorType, Result, Color, ColorPalette } from "../lib/interface";
+import {
+  ColorType,
+  Result,
+  Color,
+  ColorPalette,
+  RgbColor,
+} from "../lib/interface";
 import ColorPreview from "./HomePage/ColorPreview";
 import SlightSlope from "./HomePage/SlightSlope";
 
@@ -74,56 +80,25 @@ const Main = (props: Props) => {
     return setTextColor(`rgb(${r}, ${g}, ${b})`);
   };
 
-  const generateColorPalette = () => {
-    const tColor = convertColorToRgbObject(textColor);
-    const bColor = convertColorToRgbObject(bgColor);
-
-    console.log("submitted");
-
-    setTextColorPalettes([]);
-    setBgColorPalettes([]);
-
-    modes.forEach(async ({ mode, count, name }, index) => {
+  const generateColors = (color: string) => {
+    const RgbColor: RgbColor = convertColorToRgbObject(color);
+    const pallettes = modes.map(async ({ mode, count, name }) => {
       const res = await fetch(
-        `https://www.thecolorapi.com/scheme?rgb=${tColor.r},${tColor.g},${tColor.b}&format=json&mode=${mode}&count=${count}`
+        `https://www.thecolorapi.com/scheme?rgb=${RgbColor.r},${RgbColor.g},${RgbColor.b}&format=json&mode=${mode}&count=${count}`
       );
       const data = await res.json();
-
-      setTextColorPalettes((prev) => [
-        ...prev,
-        {
-          colors: data.colors.map((color) => ({
-            rgb: color.rgb.value,
-            hex: color.hex.value,
-            hsl: color.hsl.value,
-            cmyk: color.cmyk.value,
-          })),
-          mode,
-          paletteName: name,
-        },
-      ]);
+      return {
+        colors: data.colors.map((color) => ({
+          rgb: color.rgb.value,
+          hex: color.hex.value,
+          hsl: color.hsl.value,
+          cmyk: color.cmyk.value,
+        })),
+        mode,
+        paletteName: name,
+      };
     });
-
-    modes.forEach(async ({ mode, count, name }) => {
-      const res = await fetch(
-        `https://www.thecolorapi.com/scheme?rgb=${bColor.r},${bColor.g},${bColor.b}&format=json&mode=${mode}&count=${count}`
-      );
-      const data = await res.json();
-
-      setBgColorPalettes((prev) => [
-        ...prev,
-        {
-          colors: data.colors.map((color) => ({
-            rgb: color.rgb.value,
-            hex: color.hex.value,
-            hsl: color.hsl.value,
-            cmyk: color.cmyk.value,
-          })),
-          mode,
-          paletteName: name,
-        },
-      ]);
-    });
+    return pallettes;
   };
 
   const handleScroll = () => {
@@ -155,8 +130,27 @@ const Main = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    console.log(shouldGeneratePalette);
-    if (shouldGeneratePalette === true) generateColorPalette();
+    if (shouldGeneratePalette === true) {
+      console.log("generating");
+      setBgColorPalettes([]);
+      setTextColorPalettes([]);
+      generateColors(bgColor).forEach(async (x) => {
+        const palette = await x;
+        setBgColorPalettes((prev) =>
+          [...prev, palette].sort((a, b) =>
+            a.paletteName.localeCompare(b.paletteName)
+          )
+        );
+      });
+      generateColors(textColor).forEach(async (x) => {
+        const palette = await x;
+        setTextColorPalettes((prev) =>
+          [...prev, palette].sort((a, b) =>
+            a.paletteName.localeCompare(b.paletteName)
+          )
+        );
+      });
+    }
   }, [shouldGeneratePalette]);
 
   return (
@@ -427,13 +421,12 @@ const Main = (props: Props) => {
                     </h3>
                     <div className="flex">
                       {colorPalettes.colors.map((color) => (
-                        <div>
+                        <div key={Math.random()}>
                           <div
-                            key={Math.random()}
                             style={{ backgroundColor: color.rgb }}
                             className="h-28 w-28"
                           ></div>
-                          <p className="flex flex-col space-y-[4px] w-36">
+                          <p className="flex flex-col w-36">
                             {typesOfColor.map((value) =>
                               value === "rgb" ? (
                                 <span>{color.rgb}</span>
@@ -464,11 +457,10 @@ const Main = (props: Props) => {
                     <h3 className="font-medium pb-2">
                       {colorPalettes.paletteName}
                     </h3>
-                    <div className="flex space-x-[28px]">
+                    <div className="flex">
                       {colorPalettes.colors.map((color) => (
-                        <div>
+                        <div key={Math.random()}>
                           <div
-                            key={Math.random()}
                             style={{ backgroundColor: color.rgb }}
                             className="h-28 w-28"
                           ></div>
@@ -499,47 +491,3 @@ const Main = (props: Props) => {
 };
 
 export default Main;
-
-{
-  /* <div className="flex justify-center">
-  <div className="flex flex-col py-2 space-y-[4px]">
-    <label htmlFor="bgColor" className="flex items-center">
-      <input
-        type="radio"
-        id="bgColor"
-        name="color"
-        value="bgColor"
-        className="mr-2 cursor-pointer"
-        defaultChecked
-      />
-      Background Color
-      <div
-        style={{
-          backgroundColor: bgColor,
-          height: "20px",
-          width: "20px",
-          marginLeft: "4px",
-        }}
-      />
-    </label>
-    <label htmlFor="textColor" className="flex items-center">
-      <input
-        type="radio"
-        id="textColor"
-        name="color"
-        value="textColor"
-        className="mr-2 cursor-pointer"
-      />
-      Text Color
-      <div
-        style={{
-          backgroundColor: textColor,
-          height: "20px",
-          width: "20px",
-          marginLeft: "4px",
-        }}
-      />
-    </label>
-  </div>
-</div>; */
-}
