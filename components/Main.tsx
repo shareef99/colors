@@ -131,14 +131,17 @@ const Main = (props: Props) => {
 
   useEffect(() => {
     if (shouldGeneratePalette === true) {
-      console.log("generating");
       setBgColorPalettes([]);
       setTextColorPalettes([]);
       generateColors(bgColor).forEach(async (x) => {
         const palette = await x;
         setBgColorPalettes((prev) =>
           [...prev, palette].sort((a, b) =>
-            a.paletteName.localeCompare(b.paletteName)
+            a.colors.length === b.colors.length
+              ? 0
+              : a.colors.length < b.colors.length
+              ? -1
+              : 1
           )
         );
       });
@@ -146,7 +149,11 @@ const Main = (props: Props) => {
         const palette = await x;
         setTextColorPalettes((prev) =>
           [...prev, palette].sort((a, b) =>
-            a.paletteName.localeCompare(b.paletteName)
+            a.colors.length === b.colors.length
+              ? 0
+              : a.colors.length < b.colors.length
+              ? -1
+              : 1
           )
         );
       });
@@ -426,19 +433,19 @@ const Main = (props: Props) => {
                             style={{ backgroundColor: color.rgb }}
                             className="h-28 w-28"
                           ></div>
-                          <p className="flex flex-col w-36">
-                            {typesOfColor.map((value) =>
-                              value === "rgb" ? (
-                                <span>{color.rgb}</span>
-                              ) : value === "hex" ? (
-                                <span>{color.hex}</span>
-                              ) : value === "hsl" ? (
-                                <span>{color.hsl}</span>
-                              ) : (
-                                <span>{color.cmyk.replaceAll("NaN", "0")}</span>
-                              )
-                            )}
-                          </p>
+                          <div className="flex flex-col w-36">
+                            {typesOfColor.map((value) => (
+                              <div key={Math.random()}>
+                                {value === "rgb"
+                                  ? color.rgb
+                                  : value === "hex"
+                                  ? color.hex
+                                  : value === "hsl"
+                                  ? color.hsl
+                                  : color.cmyk.replaceAll("NaN", "0")}
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -464,19 +471,19 @@ const Main = (props: Props) => {
                             style={{ backgroundColor: color.rgb }}
                             className="h-28 w-28"
                           ></div>
-                          <p className="flex flex-col w-36">
-                            {typesOfColor.map((value) =>
-                              value === "rgb" ? (
-                                <span>{color.rgb}</span>
-                              ) : value === "hex" ? (
-                                <span>{color.hex}</span>
-                              ) : value === "hsl" ? (
-                                <span>{color.hsl}</span>
-                              ) : (
-                                <span>{color.cmyk.replaceAll("NaN", "0")}</span>
-                              )
-                            )}
-                          </p>
+                          <div className="flex flex-col w-36">
+                            {typesOfColor.map((value) => (
+                              <span key={Math.random()}>
+                                {value === "rgb"
+                                  ? color.rgb
+                                  : value === "hex"
+                                  ? color.hex
+                                  : value === "hsl"
+                                  ? color.hsl
+                                  : color.cmyk.replaceAll("NaN", "0")}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
