@@ -164,10 +164,10 @@ const Main = (props: Props) => {
       <div className="container mt-6 mb-2">
         <p
           id="logo"
-          className="text-3xl font-bold first-letter:text-5xl first-letter:text-blue"
+          className="first-letter:text-blue text-3xl font-bold first-letter:text-5xl"
         >
           <span>G𝚘𝚘d</span>
-          <span className="inline-block first-letter:text-4xl first-letter:text-blue">
+          <span className="first-letter:text-blue inline-block first-letter:text-4xl">
             C𝚘ʅ𝚘rs
           </span>
         </p>
@@ -176,8 +176,8 @@ const Main = (props: Props) => {
         {/* color picker */}
         <div className="mr-3 flex-grow">
           <div
-            className="flex flex-col pl-5 font-medium text-gray-600 xs:flex-row 
-              xs:items-center xs:justify-between xs:pl-0 sm:px-5"
+            className="xs:flex-row xs:items-center xs:justify-between xs:pl-0 flex flex-col 
+              pl-5 font-medium text-gray-600 sm:px-5"
           >
             <p>
               <span>Color contrast:</span>
@@ -241,7 +241,7 @@ const Main = (props: Props) => {
               typesOfColor={typesOfColor}
             />
           </div>
-          <div className="flex flex-col xs:flex-row xs:space-x-4 md:flex-col md:space-x-0">
+          <div className="xs:flex-row xs:space-x-4 flex flex-col md:flex-col md:space-x-0">
             {colors.map((color) => (
               <ColorPreview
                 key={color}
@@ -264,13 +264,13 @@ const Main = (props: Props) => {
         onBgColorChange={(color: string) => setBgColor(color)}
         onTextColorChange={(color: string) => setTextColor(color)}
       />
-      <section className="container -mt-28 rounded-t-lg bg-lightBg py-10">
-        <h2 className="text-center text-4xl font-semibold text-blue xs:text-5xl">
+      <section className="bg-lightBg container -mt-28 rounded-t-lg py-10">
+        <h2 className="text-blue xs:text-5xl text-center text-4xl font-semibold">
           More Fun With Colors
         </h2>
-        <div className="px-4 xs:px-[10%]">
+        <div className="xs:px-[10%] px-4">
           <div className="my-5">
-            <h3 className="text-xl font-semibold xs:text-2xl">
+            <h3 className="xs:text-2xl text-xl font-semibold">
               Background Color Palettes
             </h3>
             <TypesOfColor
@@ -280,15 +280,17 @@ const Main = (props: Props) => {
               className="font-medium"
             />
             <ColorPalettes
+              color={bgColor}
               typesOfColor={typesOfColor}
               colorPalettes={bgColorPalettes}
             />
           </div>
           <div className="my-5">
-            <h3 className="text-xl font-semibold xs:text-2xl">
+            <h3 className="xs:text-2xl text-xl font-semibold">
               Text Color Palettes
             </h3>
             <ColorPalettes
+              color={textColor}
               typesOfColor={typesOfColor}
               colorPalettes={textColorPalettes}
             />
