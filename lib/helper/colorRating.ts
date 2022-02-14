@@ -1,4 +1,4 @@
-import { Result, RgbColor } from "../lib/interface";
+import { Result, RgbColor } from "../interface";
 import { convertColorToRgbObject } from "./colorConverter";
 
 export const getLuminance = ({ r, g, b }: RgbColor): number => {
