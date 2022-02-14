@@ -22,7 +22,7 @@ const ColorValues = ({
 }: Props) => {
   return (
     <div
-      className="flex flex-col ml-2 mt-2"
+      className="ml-2 mt-2 flex flex-col"
       style={{ color: currentColor === "bgColor" && textColor }}
     >
       {typesOfColor.map((colorType) => (
@@ -33,7 +33,7 @@ const ColorValues = ({
                 <span>r:</span>
                 <input
                   type="text"
-                  className="w-8 text-center p-0 m-0 border-0 bg-transparent cursor-pointer"
+                  className="m-0 w-8 cursor-pointer border-0 bg-transparent p-0 text-center"
                   value={
                     convertColorToRgbObject(
                       currentColor === "bgColor" ? bgColor : textColor
@@ -51,7 +51,7 @@ const ColorValues = ({
                       currentColor === "bgColor" ? bgColor : textColor
                     ).g
                   }
-                  className="w-8 text-center p-0 m-0 border-0 bg-transparent cursor-pointer"
+                  className="m-0 w-8 cursor-pointer border-0 bg-transparent p-0 text-center"
                   onChange={(e) => onRgbColorChange(e, "g")}
                 />
               </div>
@@ -64,7 +64,7 @@ const ColorValues = ({
                       currentColor === "bgColor" ? bgColor : textColor
                     ).b
                   }
-                  className="w-8 text-center p-0 m-0 border-0 bg-transparent cursor-pointer"
+                  className="m-0 w-8 cursor-pointer border-0 bg-transparent p-0 text-center"
                   onChange={(e) => onRgbColorChange(e, "b")}
                 />
               </div>

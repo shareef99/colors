@@ -30,7 +30,7 @@ const Content = ({
         }}
       >
         <div className="flex">
-          <div className="flex flex-col font-semibold text-center pr-4">
+          <div className="flex flex-col pr-4 text-center font-semibold">
             <span
               className={`${headingResult === "FAIL" ? "line-through" : ""}`}
             >
@@ -42,12 +42,12 @@ const Content = ({
               AAA
             </span>
           </div>
-          <h1 className="font-black text-4xl xs:text-5xl">
+          <h1 className="text-4xl font-black xs:text-5xl">
             Why choosing Good Colors is important.
           </h1>
         </div>
         <div className="flex items-center">
-          <div className="flex flex-col font-semibold text-center pr-4">
+          <div className="flex flex-col pr-4 text-center font-semibold">
             <span className={`${textResult === "FAIL" ? "line-through" : ""}`}>
               AA
             </span>
@@ -56,7 +56,7 @@ const Content = ({
             </span>
           </div>
           <div>
-            <p className="py-5 font-medium strong italic text-lg">
+            <p className="strong py-5 text-lg font-medium italic">
               Choosing the right color combinations is crucial to creating a
               successful website.
             </p>
@@ -75,7 +75,7 @@ const Content = ({
         </div>
 
         <div className="py-10">
-          <h2 className="font-bold text-3xl">Colour contrast</h2>
+          <h2 className="text-3xl font-bold">Colour contrast</h2>
           <p className="pt-5">
             For digital accessibility, the concept of color contrast is as
             critical as it is simple. Color contrast refers to the difference in
@@ -88,7 +88,7 @@ const Content = ({
 
         <div className="text-xl">
           <blockquote
-            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-4 xs:pl-8 sm:pl-10"
+            className="rounded-tl-sm rounded-bl-sm border-l-4 pl-4 xs:pl-8 sm:pl-10"
             style={{ borderColor: textColor }}
           >
             how to{" "}
@@ -103,7 +103,7 @@ const Content = ({
           </blockquote>
           <br />
           <blockquote
-            className="border-l-4 rounded-tl-sm rounded-bl-sm pl-4 xs:pl-8 sm:pl-10 flex flex-col"
+            className="flex flex-col rounded-tl-sm rounded-bl-sm border-l-4 pl-4 xs:pl-8 sm:pl-10"
             style={{ borderColor: textColor }}
           >
             <span>
@@ -118,11 +118,11 @@ const Content = ({
           </blockquote>
         </div>
 
-        <div className="pt-10 font-medium flex flex-col">
+        <div className="flex flex-col pt-10 font-medium">
           <span className="pb-3">Random Colors</span>
           <div>
             <button
-              className="border-2 rounded-md px-3 py-1 mx-0"
+              className="mx-0 rounded-md border-2 px-3 py-1"
               style={{
                 borderColor: textColor,
                 color: bgColor,
@@ -133,7 +133,7 @@ const Content = ({
               Background
             </button>
             <button
-              className="border-2 rounded-md px-4 py-1 mx-4"
+              className="mx-4 rounded-md border-2 px-4 py-1"
               style={{ borderColor: textColor }}
               onClick={() => onTextColorChange(getRandomColor())}
             >

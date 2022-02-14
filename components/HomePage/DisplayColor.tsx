@@ -15,7 +15,7 @@ const DisplayColor = ({
 }: Props) => {
   return (
     <div
-      className={`w-56 rounded shadow-md flex justify-center items-center ${
+      className={`flex w-56 items-center justify-center rounded shadow-md ${
         noOfColors === 0
           ? "h-[216px]"
           : noOfColors === 1

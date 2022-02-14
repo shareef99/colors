@@ -6,8 +6,8 @@ type Props = {
 const SlightSlope = ({ bgColor, position }: Props) => {
   return (
     <div
-      className={`h-14 relative -z-50 ${
-        position === "top" ? "rotate-180 -mt-28" : "rotate-[270]"
+      className={`relative -z-50 h-14 ${
+        position === "top" ? "-mt-28 rotate-180" : "rotate-[270]"
       }`}
     >
       <svg
@@ -21,7 +21,7 @@ const SlightSlope = ({ bgColor, position }: Props) => {
         xmlSpace="preserve"
         preserveAspectRatio="none"
         fill={bgColor}
-        className="w-full h-full"
+        className="h-full w-full"
       >
         <polygon points="0,0 0,94 293,0 "></polygon>
       </svg>

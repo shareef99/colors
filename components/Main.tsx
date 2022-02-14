@@ -161,33 +161,33 @@ const Main = (props: Props) => {
 
   return (
     <main>
-      <div className="mt-6 mb-2 container">
+      <div className="container mt-6 mb-2">
         <p
           id="logo"
-          className="font-bold text-3xl first-letter:text-blue first-letter:text-5xl"
+          className="text-3xl font-bold first-letter:text-5xl first-letter:text-blue"
         >
           <span>G𝚘𝚘d</span>
-          <span className="inline-block first-letter:text-blue first-letter:text-4xl">
+          <span className="inline-block first-letter:text-4xl first-letter:text-blue">
             C𝚘ʅ𝚘rs
           </span>
         </p>
       </div>
-      <section className="flex flex-col md:flex-row justify-between container">
+      <section className="container flex flex-col justify-between md:flex-row">
         {/* color picker */}
-        <div className="flex-grow mr-3">
+        <div className="mr-3 flex-grow">
           <div
-            className="flex flex-col xs:flex-row xs:justify-between xs:items-center font-medium 
-              text-gray-600 pl-5 xs:pl-0 sm:px-5"
+            className="flex flex-col pl-5 font-medium text-gray-600 xs:flex-row 
+              xs:items-center xs:justify-between xs:pl-0 sm:px-5"
           >
             <p>
               <span>Color contrast:</span>
-              <span className="text-2xl pl-2">{colorContrast}</span>
+              <span className="pl-2 text-2xl">{colorContrast}</span>
             </p>
             <div className="space-x-8">
               <span>
                 Text{" "}
                 <span
-                  className="font-medium text-xl ml-1"
+                  className="ml-1 text-xl font-medium"
                   style={{
                     color:
                       textResult === "FAIL" ? "var(--error)" : "var(--success)",
@@ -199,7 +199,7 @@ const Main = (props: Props) => {
               <span>
                 Heading{" "}
                 <span
-                  className="font-medium text-xl ml-1"
+                  className="ml-1 text-xl font-medium"
                   style={{
                     color:
                       headingResult === "FAIL"
@@ -224,7 +224,7 @@ const Main = (props: Props) => {
         <div className="self-center">
           <div
             id="flip and color types"
-            className="flex justify-between mb-2 font-medium"
+            className="mb-2 flex justify-between font-medium"
           >
             <button
               onClick={() => {
@@ -233,7 +233,7 @@ const Main = (props: Props) => {
               }}
               className="flex"
             >
-              Flip <MdFlipCameraAndroid className="self-center ml-1" />
+              Flip <MdFlipCameraAndroid className="ml-1 self-center" />
             </button>
             <TypesOfColor
               colorTypes={colorTypes}
@@ -264,15 +264,13 @@ const Main = (props: Props) => {
         onBgColorChange={(color: string) => setBgColor(color)}
         onTextColorChange={(color: string) => setTextColor(color)}
       />
-      <section className="py-10 bg-lightBg container -mt-28 rounded-t-lg">
-        <div className="text-center">
-          <h2 className="text-4xl xs:text-5xl text-center font-semibold text-blue">
-            More Fun With Colors
-          </h2>
-        </div>
+      <section className="container -mt-28 rounded-t-lg bg-lightBg py-10">
+        <h2 className="text-center text-4xl font-semibold text-blue xs:text-5xl">
+          More Fun With Colors
+        </h2>
         <div className="px-4 xs:px-[10%]">
           <div className="my-5">
-            <h3 className="font-semibold text-xl xs:text-2xl">
+            <h3 className="text-xl font-semibold xs:text-2xl">
               Background Color Palettes
             </h3>
             <TypesOfColor
@@ -287,7 +285,7 @@ const Main = (props: Props) => {
             />
           </div>
           <div className="my-5">
-            <h3 className="font-semibold text-xl xs:text-2xl">
+            <h3 className="text-xl font-semibold xs:text-2xl">
               Text Color Palettes
             </h3>
             <ColorPalettes

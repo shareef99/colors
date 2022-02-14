@@ -11,7 +11,7 @@ const ColorPalettes = ({ colorPalettes, typesOfColor }: Props) => {
       {colorPalettes &&
         colorPalettes.map((palette) => (
           <div key={Math.random()}>
-            <h3 className="font-medium pb-2">{palette.paletteName}</h3>
+            <h3 className="pb-2 font-medium">{palette.paletteName}</h3>
             <div className="flex">
               {palette.colors.map((color) => (
                 <div key={Math.random()}>
@@ -19,7 +19,7 @@ const ColorPalettes = ({ colorPalettes, typesOfColor }: Props) => {
                     style={{ backgroundColor: color.rgb }}
                     className="h-28 w-28"
                   ></div>
-                  <div className="flex flex-col w-36">
+                  <div className="flex w-36 flex-col">
                     {typesOfColor.map((value) => (
                       <div key={Math.random()}>
                         {value === "rgb"
