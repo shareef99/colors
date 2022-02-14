@@ -81,7 +81,8 @@ const Content = ({
             critical as it is simple. Color contrast refers to the difference in
             light between foreground and its background. By using
             sufficiently-contrasting colors you are making sure that the great
-            content you've developed for your website can be read by everyone.
+            content you&apos;ve developed for your website can be read by
+            everyone.
           </p>
         </div>
 
@@ -94,6 +95,7 @@ const Content = ({
             <a
               href="https://www.google.com"
               target="_blank"
+              rel="noopener noreferrer"
               className="font-medium hover:opacity-90 hover:duration-500 hover:ease-in"
             >
               calculate Color Contrast
